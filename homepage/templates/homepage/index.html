@@ -1,0 +1,168 @@
+{% extends 'base/main.html' %}
+
+{% block style %}
+    .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+
+    @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+    }
+    }
+    /*
+    * Globals
+    */
+
+    /* Links */
+    a,
+    a:focus,
+    a:hover {
+    color: #333;
+    }
+
+    /* Custom default button */
+    .btn-secondary,
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+    color: #333;
+    text-shadow: none; /* Prevent inheritance from `body` */
+    background-color: #fff;
+    border: .05rem solid #fff;
+    }
+
+
+    /*
+    * Base structure
+    */
+
+    html,
+    body {
+    height: 100%;
+    background-color: #eee;
+    }
+
+    body {
+    display: -ms-flexbox;
+    display: flex;
+    color: #333;
+{#    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);#}
+{#    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);#}
+    }
+
+    .cover-container {
+    max-width: 42em;
+    }
+
+
+    /*
+    * Header
+    */
+    .masthead {
+    margin-bottom: 2rem;
+    }
+
+    .masthead-brand {
+    margin-bottom: 0;
+    }
+
+    .nav-masthead .nav-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: rgba(30, 30, 30, .5);
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+    }
+
+    .span-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: rgba(30, 30, 30, .5);
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+    }
+
+
+    .nav-masthead .nav-link:hover,
+    .nav-masthead .nav-link:focus {
+    border-bottom-color: rgba(33, 33, 33, .25);
+    }
+
+    .nav-masthead .nav-link + .nav-link {
+    margin-left: 1rem;
+    }
+
+    .nav-masthead .active {
+    color: #333;
+    border-bottom-color: #333;
+    }
+
+    @media (min-width: 48em) {
+    .masthead-brand {
+    float: left;
+    }
+    .nav-masthead {
+    float: right;
+    }
+    }
+
+
+    /*
+    * Cover
+    */
+    .cover {
+    padding: 0 1.5rem;
+    }
+    .cover .btn-lg {
+    padding: .75rem 1.25rem;
+    font-weight: 700;
+    }
+
+
+    /*
+    * Footer
+    */
+    .mastfoot {
+    color: rgba(255, 255, 255, .5);
+    }
+
+{% endblock %}
+
+{% block title %}财务综合管理系统{% endblock %}
+
+{% block body %}
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column text-center">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand text-center"><img src="{% static 'img/logo.png' %}" alt=""></h3>
+            <nav class="nav nav-masthead justify-content-center">
+                    {% if user.is_authenticated %}
+                        <span class="align-bottom span-link" style="padding: 4px 4px; color: rgba(30, 30, 30, .5)">欢迎 {{ user.username }}&nbsp;</span>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'login' %}?next=/">登录</a>
+                {% endif %}
+                <a class="nav-link" href="{% url 'homepage:about' %}">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">内部财务综合管理系统</h1>
+        <p class="lead">仅供财务部内部使用</p>
+        <p class="lead">
+            <a href="" class="btn btn-lg btn-primary">进入系统</a>
+        </p>
+    </main>
+
+    <footer class="mastfoot mt-auto text-center">
+        <div class="inner">
+            <p>&copy; All rights reserved 2017-2021</p>
+        </div>
+    </footer>
+</div>
+{% endblock %}

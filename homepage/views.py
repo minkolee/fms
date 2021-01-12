@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.forms import UserCreationForm
+from .models import About
 
 
 def home(request):
-    return render(request, 'homepage/homepage.html')
+    return render(request, 'homepage/index.html')
 
 
 def register(request):
@@ -21,3 +22,8 @@ def register(request):
     else:
         form = UserCreationForm()
         return render(request, 'users/register.html', {'form': form})
+
+
+def about(request):
+    abouts = About.objects.all()
+    return render(request, 'homepage/about.html',{'abouts':abouts})

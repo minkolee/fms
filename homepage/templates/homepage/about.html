@@ -1,0 +1,29 @@
+{% extends 'base/main.html' %}
+{% block title %}更新记录{% endblock %}
+
+{% block body %}
+    <h2 class="text-center mt-2 mb-2">版本更新历史</h2>
+<div class="container">
+<div class="accordion" id="accordionExample">
+    {% for about in abouts %}
+      <div class="card">
+    <div class="card-header" id="about{{ forloop.counter }}">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#aboutt{{forloop.counter}}" aria-expanded="false" aria-controls="aboutt{{forloop.counter}}">
+          版本&nbsp;{{ about.version }}
+        </button>
+      </h2>
+    </div>
+
+    <div id="aboutt{{forloop.counter}}" class="collapse" aria-labelledby="about{{ forloop.counter }}" data-parent="#accordionExample">
+      <div class="card-body">{{ about.detail }}</div>
+    </div>
+  </div>
+
+    {% endfor %}
+
+
+
+</div>
+</div>
+{% endblock %}
