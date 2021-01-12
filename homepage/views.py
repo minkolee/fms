@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.forms import UserCreationForm
 from .models import About
+from django.contrib.auth.decorators import login_required
 
 
-def home(request):
+def index(request):
     return render(request, 'homepage/index.html')
 
 
@@ -26,4 +27,9 @@ def register(request):
 
 def about(request):
     abouts = About.objects.all()
-    return render(request, 'homepage/about.html',{'abouts':abouts})
+    return render(request, 'homepage/about.html', {'abouts': abouts})
+
+
+@login_required(login_url='/login/')
+def home(request):
+    return render(request, 'homepage/dashboard.html')

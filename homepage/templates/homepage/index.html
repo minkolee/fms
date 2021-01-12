@@ -133,7 +133,7 @@
 
 {% endblock %}
 
-{% block title %}财务综合管理系统{% endblock %}
+{% block title %}财务管理系统{% endblock %}
 
 {% block body %}
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column text-center">
@@ -152,10 +152,10 @@
     </header>
 
     <main role="main" class="inner cover">
-        <h1 class="cover-heading">内部财务综合管理系统</h1>
+        <h1 class="cover-heading">内部财务管理系统</h1>
         <p class="lead">仅供财务部内部使用</p>
         <p class="lead">
-            <a href="" class="btn btn-lg btn-primary">进入系统</a>
+            <a href="{% url 'homepage:dashboard' %}" class="btn btn-lg btn-primary">进入系统</a>
         </p>
     </main>
 
