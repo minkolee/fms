@@ -1,0 +1,16 @@
+{% extends 'base/main.html' %}
+
+{% block title %}测试页面{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <h1>首页</h1>
+        {% if user.is_authenticated %}
+            <p><a href="{% url 'logout' %}">登出</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">登录</a></p>
+        {% endif %}
+        <p><a href="{% url 'homepage:register' %}?next={{ request.path }}">注册新用户</a></p>
+    </div>
+
+{% endblock %}

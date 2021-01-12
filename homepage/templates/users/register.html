@@ -1,0 +1,107 @@
+{% extends 'base/main.html' %}
+
+{% block style %}
+    html,
+    body {
+    height: 100%;
+    }
+
+    body {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    }
+
+    .form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    }
+    .form-signin .checkbox {
+    font-weight: 400;
+    }
+    .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+    }
+    .form-signin .form-control:focus {
+    z-index: 2;
+    }
+    .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    }
+    .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    }
+
+{% endblock %}
+
+{% block title %}注册新用户{% endblock %}
+
+{% block body %}
+
+    {% if user.is_authenticated %}
+        <div class="container">
+            <h1 class="text-center">您已登录</h1>
+            <h3 class="text-center">请<a href="{% url 'homepage:homepage' %}">进入首页</a>或<a
+                    href="{% url 'logout' %}">登出</a></h3>
+        </div>
+
+    {% else %}
+        <form class="form-signin" action="{% url 'homepage:register' %}" method="post">
+
+            {% for field in form %}
+                 {{ field.label_tag.name }}
+                    {{ field }}
+                 {{ field.errors }}
+            {% endfor %}
+
+            {{ form.fields }}
+
+{#            <h1 class="h3 mb-3 font-weight-normal text-center">请填写注册信息</h1>#}
+{#            <div class="form-group">#}
+{#                <label for="id_username" class="sr-only">用户名:</label>#}
+{#                <input placeholder="用户名" class="form-control" type="text" name="username" maxlength="150"#}
+{#                       autocapitalize="none" autocomplete="username"#}
+{#                       autofocus required id="id_username" >#}
+{#                {{ form.username.errors }}#}
+{#                <small id="emailHelp" class="form-text text-muted">必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。</small>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="id_password1" class="sr-only">密码:</label>#}
+{#                <input placeholder="密码" class="form-control" type="password" name="password1"#}
+{#                       autocomplete="new-password"#}
+{#                       required#}
+{#                       id="id_password1" >#}
+{#                <small id="emailHelp" class="form-text text-muted">密码必须包含至少8个字符，不能全都是数字</small>#}
+{##}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="id_password2" class="sr-only">密码确认:</label>#}
+{#                <input placeholder="密码确认" class="form-control" type="password" name="password2"#}
+{#                       autocomplete="new-password" required#}
+{#                       id="id_password2" >#}
+{#                <small id="emailHelp" class="form-text text-muted">请输入与上面相同的密码</small>#}
+{##}
+{#            </div>#}
+            {% csrf_token %}
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+            <p>已有用户名？请<a href="{% url 'login' %}?next={{ request.path }}">登录</a></p>
+        </form>
+
+    {% endif %}
+
+{% endblock %}
