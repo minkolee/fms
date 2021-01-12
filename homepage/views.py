@@ -10,17 +10,14 @@ def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            print('有效')
             new_user = form.save(commit=False)
             new_user.is_active = False
             new_user.save()
-            return redirect(reverse('login'))
+            return render(request, 'users/register_success.html')
         else:
-            print(form.fields['username'])
-            print(form.errors)
-            return render(request, 'users/register.html', {'form': form, "error": form.error_messages})
+
+            return render(request, 'users/register.html', {'form': form})
 
     else:
         form = UserCreationForm()
-
-    return render(request, 'users/register.html', {'form': form})
+        return render(request, 'users/register.html', {'form': form})

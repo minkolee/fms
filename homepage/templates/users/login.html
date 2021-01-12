@@ -53,32 +53,36 @@
 {% block body %}
 
     {% if user.is_authenticated %}
-    <div class="container">
-    <h1 class="text-center">欢迎&nbsp;{{ request.user.username }}</h1>
-    <h3 class="text-center">请<a href="{% url 'homepage:homepage' %}">进入首页</a>或<a href="{% url 'logout' %}">登出</a></h3>
-    </div>
+        <div class="container">
+            <h1 class="text-center">欢迎&nbsp;{{ request.user.username }}</h1>
+            <h3 class="text-center">请<a href="{% url 'homepage:homepage' %}">进入首页</a>或<a
+                    href="{% url 'logout' %}">登出</a></h3>
+        </div>
 
     {% else %}
-    <form class="form-signin" action="{% url 'login' %}" method="post">
+        <form class="form-signin" action="{% url 'login' %}" method="post">
 
-        <h1 class="h3 mb-3 font-weight-normal text-center">请登录</h1>
-        {% if form.errors %}
-            <p class="text-danger text-center">用户名和密码不正确，请重试</p>
-        {% endif %}
+            <h1 class="h3 mb-3 font-weight-normal text-center">请登录</h1>
 
-        <label for="id_username" class="sr-only">用户名:</label>
-        <input placeholder="用户名" class="form-control" type="text" name="username" autofocus="" autocapitalize="none"
-               autocomplete="username" maxlength="150" required="" id="id_username">
+            <label for="id_username" class="sr-only">用户名:</label>
+            <input placeholder="用户名" class="form-control" type="text" name="username" autofocus="" autocapitalize="none"
+                   autocomplete="username" maxlength="150" required="" id="id_username">
 
-        <label for="id_password" class="sr-only">密码:</label>
-        <input placeholder="密码" class="form-control" type="password" name="password" autocomplete="current-password"
-               required="" id="id_password">
+            <label for="id_password" class="sr-only">密码:</label>
+            <input placeholder="密码" class="form-control" type="password" name="password" autocomplete="current-password"
+                   required="" id="id_password">
 
-        <input type="hidden" name="next" value="{{ next }}">
-        {% csrf_token %}
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-        <p class="mt-5 mb-3 text-muted">&copy; All rights reserved 2017-2021</p>
-    </form>
+            {% if form.errors %}
+                <p class="text-danger text-center">用户名和密码不正确，或账号需要激活。请重试</p>
+            {% endif %}
+
+            <input type="hidden" name="next" value="{{ next }}">
+            {% csrf_token %}
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+            <p class="mt-2">刚开始使用该系统？请<a href="{% url 'homepage:register' %}">注册新用户</a></p>
+            <p class="mt-2">账号未激活或忘记密码？请<a href="mailto:liyiming@sinochem.com">联系管理员</a></p>
+            <p class="mt-2 text-muted">&copy; All rights reserved 2017-2021</p>
+        </form>
     {% endif %}
 
 {% endblock %}
