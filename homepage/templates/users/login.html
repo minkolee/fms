@@ -61,8 +61,14 @@
 
     {% else %}
         <form class="form-signin" action="{% url 'login' %}" method="post">
-
             <h1 class="h3 mb-3 font-weight-normal text-center">登 录</h1>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <label for="id_username" class="sr-only">用户名:</label>
             <input placeholder="用户名" class="form-control" type="text" name="username" autofocus="" autocapitalize="none"
                    autocomplete="username" maxlength="150" required="" id="id_username">
@@ -76,7 +82,7 @@
             {% csrf_token %}
             <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
             <p class="mt-2">刚开始使用本系统？请<a href="{% url 'homepage:register' %}">注册新用户</a></p>
-            <p class="mt-2">账号未激活或忘记密码？请<a href="mailto:liyiming@sinochem.com">联系管理员</a></p>
+            {#            <p class="mt-2">账号未激活或忘记密码？请<a href="mailto:liyiming@sinochem.com">联系管理员</a></p>#}
             <p class="mt-2 text-muted">&copy; All rights reserved 2017-2021</p>
         </form>
     {% endif %}

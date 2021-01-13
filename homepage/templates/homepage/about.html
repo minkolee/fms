@@ -3,7 +3,9 @@
 
 {% block body %}
     <h2 class="text-center mt-2 mb-2">版本更新历史</h2>
+
 <div class="container">
+    <a type="button" class="btn btn-primary mb-1 text-white" href="{% url 'homepage:homepage' %}" >返回</a>
 <div class="accordion" id="accordionExample">
     {% for about in abouts %}
       <div class="card">
@@ -16,7 +18,12 @@
     </div>
 
     <div id="aboutt{{forloop.counter}}" class="collapse" aria-labelledby="about{{ forloop.counter }}" data-parent="#accordionExample">
-      <div class="card-body">{{ about.detail }}</div>
+      <div class="card-body">
+          <blockquote class="blockquote">
+  <p class="mb-0">{{ about.detail }}</p>
+  <footer class="blockquote-footer">{{ about.created }}</footer>
+</blockquote>
+          </div>
     </div>
   </div>
 

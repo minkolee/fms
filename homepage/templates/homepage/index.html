@@ -143,6 +143,7 @@
             <nav class="nav nav-masthead justify-content-center">
                     {% if user.is_authenticated %}
                         <span class="align-bottom span-link" style="padding: 4px 4px; color: rgba(30, 30, 30, .5)">欢迎 {{ user.username }}&nbsp;</span>
+                        <a class="nav-link" href="{% url 'logout' %}?next=/">登出</a>
                         {% else %}
                         <a class="nav-link" href="{% url 'login' %}?next=/">登录</a>
                 {% endif %}
