@@ -1,0 +1,44 @@
+{% extends 'base/fix-nav.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="margin:0 auto" class="text-center alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2">新增项目</a>
+    <div class="table-responsive-lg">
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">项目名称</th>
+                <th scope="col">项目地址</th>
+                <th scope="col">项目经理</th>
+                <th scope="col">有效</th>
+                <th scope="col">操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <th>{{forloop.counter}}</th>
+                    <th scope="row">{{ project.name }}</th>
+                    <td>{{ project.address }}</td>
+                    <td>{{ project.manager }}</td>
+                    <td>{% if project.active %}
+                        正常{% else %}已结束
+                    {% endif %} </td>
+                    <td><a href="#">详情</a> | <a href="#">添加合同</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

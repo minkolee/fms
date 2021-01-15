@@ -1,0 +1,14 @@
+{% extends 'base/fix-nav.html' %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block jscode %}
+    $(':text').addClass('form-control');
+    $('textarea').addClass('form-control');
+    $('#id_active').addClass('form-check-input');
+    $('.form-check label').addClass('form-check-label');
+
+
+{% endblock %}
