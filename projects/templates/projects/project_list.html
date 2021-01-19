@@ -15,7 +15,7 @@
         <p>还没有任何项目，请<a href="{% url 'projects:project_add' %}">新增项目</a></p>
     {% else %}
         <h3 class="text-center">项目清单</h3>
-        <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2">新增项目</a>
+        <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2">新增项目</a><p><small>点击项目名称查看项目详情</small></p>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -24,21 +24,20 @@
                     <th scope="col">项目名称</th>
                     <th scope="col">项目地址</th>
                     <th scope="col">项目经理</th>
-                    <th scope="col">有效</th>
-                    <th scope="col">操作</th>
+                    <th scope="col">是否有效</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for project in projects %}
                     <tr>
                         <th>{{ forloop.counter }}</th>
-                        <th scope="row">{{ project.name }}</th>
+                        <th scope="row"><a href="{% url 'projects:project_detail' project.id %}">{{ project.name }}</a></th>
                         <td>{{ project.address }}</td>
                         <td>{{ project.manager }}</td>
                         <td>{% if project.active %}
                             <i class="fa fa-check text-success" aria-hidden="true"></i>{% else %}<i class="fa fa-times text-danger" aria-hidden="true"></i>
                         {% endif %} </td>
-                        <td><a href="{{ project.get_absolute_url }}">详情</a> | <a href="{% url 'projects:project_edit' project.id %}">编辑</a> | <a href="{% url 'projects:project_edit_initial' project.id %}">修改初始数据</a></td>
+{#                        <td><a href="{{ project.get_absolute_url }}">详情</a> | <a href="{% url 'projects:project_edit' project.id %}">编辑</a> | <a href="{% url 'projects:project_edit_initial' project.id %}">修改初始数据</a></td>#}
                     </tr>
                 {% endfor %}
                 </tbody>

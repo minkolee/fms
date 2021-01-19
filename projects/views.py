@@ -52,6 +52,15 @@ def edit_project(request, project_id):
         return render(request, 'projects/project_edit.html', {'form': form, 'project': project})
 
 
+def delete_project(request, project_id):
+    if request.method == 'POST':
+        project = get_object_or_404(Project, id=project_id)
+        project.delete()
+        return redirect('projects:project_list')
+    else:
+        return redirect('projects:project_list')
+
+
 def edit_initial(request, project_id):
     if request.method == 'POST':
         project = get_object_or_404(Project, id=project_id)
