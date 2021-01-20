@@ -6,12 +6,14 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = (
-            'name', 'address', 'manager', 'active', 'text',)
+            'name', 'address', 'manager', 'start_time', 'complete_time', 'active', 'text',)
         widgets = {
             'name': forms.TextInput(),
             'address': forms.TextInput(),
+            'start_time': forms.DateInput(format="%Y-%m-%d", attrs={'placeholder': '20YY-MM-DD'}),
+            'complete_time': forms.DateInput(format="%Y-%m-%d", attrs={'placeholder': '20YY-MM-DD 未竣工可不填写'}),
             'manager': forms.TextInput(),
-            'text': forms.Textarea(),
+            'text': forms.Textarea(attrs={'placeholder': '项目关键信息'}),
         }
 
 

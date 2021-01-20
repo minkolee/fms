@@ -11,6 +11,9 @@ class Project(models.Model):
     active = models.BooleanField(default=True, verbose_name='有效')
     text = models.TextField(blank=True, null=True, verbose_name='项目描述')
 
+    start_time = models.DateTimeField(null=True, verbose_name='启动时间')
+    complete_time = models.DateTimeField(null=True, verbose_name='竣工时间', blank=True)
+
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 

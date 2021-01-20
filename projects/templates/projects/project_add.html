@@ -8,7 +8,7 @@
             <form action="{% url 'projects:project_add' %}" method="post">
                 {% for field in form %}
 
-                    {% if forloop.counter == 4 %}
+                    {% if forloop.counter == 6 %}
                         <div class="form-group form-check">
                             {{ field.errors }}
                             {{ field }}
