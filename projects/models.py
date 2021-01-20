@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.urls import reverse
 
 
@@ -71,3 +70,13 @@ class ProjectFinanceInitialDetail(models.Model):
 
     def __str__(self):
         return self.project.name + "初始情况"
+
+
+class ProjectTarget(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')
+    cost_type = models.CharField(max_length=255, verbose_name="名称")
+    target_revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标收入', default=0)
+    target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
+    target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
+    target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
+    change_time = models.DateTimeField(null=True, verbose_name='变更时间')
