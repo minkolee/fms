@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from .models import Project, ProjectFinanceInitialDetail
-from .forms import ProjectForm, ProjectInitialDetailForm
+from .forms import ProjectForm, ProjectInitialDetailForm, ProjectBudget
 from django.contrib import messages
 
 
@@ -79,3 +79,8 @@ def edit_initial(request, project_id):
         project = get_object_or_404(Project, id=project_id)
         form = ProjectInitialDetailForm(instance=project.detail)
         return render(request, 'projects/project_edit_initial.html', {'form': form, 'project': project})
+
+
+def budget(request, project_id):
+    budgets = ProjectBudget.objects.all().filter(project__id=project_id)
+    return render(request, 'projects/project_budget.html', {'budgets': budgets})

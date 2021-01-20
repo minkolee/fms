@@ -10,7 +10,7 @@ class Project(models.Model):
     active = models.BooleanField(default=True, verbose_name='有效')
     text = models.TextField(blank=True, null=True, verbose_name='项目描述')
 
-    start_time = models.DateTimeField(null=True, verbose_name='启动时间')
+    start_time = models.DateTimeField(null=True, verbose_name='启动时间', blank=True)
     complete_time = models.DateTimeField(null=True, verbose_name='竣工时间', blank=True)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
@@ -71,12 +71,26 @@ class ProjectFinanceInitialDetail(models.Model):
     def __str__(self):
         return self.project.name + "初始情况"
 
+    def is_useful(self):
+        return self.accumulated_revenue + self.accumulated_cost + self.capitalized_cost + self.contract_asset + \
+               self.contract_liability + self.acquisition_cost + self.accumulated_cash_in + self.accumulated_cash_out \
+               + self.accounts_payable_balance + self.accounts_receivable_balance + self.vat_input + self.vat
 
-class ProjectTarget(models.Model):
+
+class ProjectBudget(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')
     cost_type = models.CharField(max_length=255, verbose_name="名称")
     target_revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标收入', default=0)
     target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
     target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
     target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
-    change_time = models.DateTimeField(null=True, verbose_name='变更时间')
+    description = models.TextField(verbose_name="变更说明",blank=True)
+    change_time = models.DateTimeField(null=True, verbose_name='变更时间',blank=True)
+
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
+    updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+
+    class Meta:
+        ordering = ['-created', ]
+        verbose_name = '项目预算'
+        verbose_name_plural = '项目预算'

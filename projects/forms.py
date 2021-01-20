@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, ProjectFinanceInitialDetail
+from .models import Project, ProjectFinanceInitialDetail, ProjectBudget
 
 
 class ProjectForm(forms.ModelForm):
@@ -33,4 +33,18 @@ class ProjectInitialDetailForm(forms.ModelForm):
             'accounts_payable_balance',
             'vat',
             'vat_input'
+        )
+
+
+class ProjectBudgetForm(forms.ModelForm):
+    class Meta:
+        model = ProjectBudget
+        fields = (
+            'cost_type',
+            'target_revenue',
+            'target_cost',
+            'target_profit',
+            'target_expense',
+            'change_time',
+            'description',
         )
