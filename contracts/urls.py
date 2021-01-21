@@ -5,7 +5,6 @@ from . import views
 app_name = 'contracts'
 
 urlpatterns = [
-    path('list/<int:project_id>/', views.contract_list_by_project, name='contract_list_by_project'),
 
 ]
 
