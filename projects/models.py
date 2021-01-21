@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Sum
 
 
 # 项目基础信息
@@ -16,8 +17,59 @@ class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
+    def has_budget(self):
+        return self.budget.count() != 0
+
     def get_absolute_url(self):
         return reverse('projects:project_detail', args=[self.id])
+
+    def total_budget_income(self):
+        if self.has_budget():
+
+            return self.budget.all().aggregate(result=Sum('target_revenue'))['result']
+        else:
+            return 0
+
+    def total_budget_cost(self):
+        if self.has_budget():
+
+            return self.budget.all().aggregate(result=Sum('target_cost'))['result']
+        else:
+            return 0
+
+    def total_budget_expense(self):
+        if self.has_budget():
+
+            return self.budget.all().aggregate(result=Sum('target_expense'))['result']
+        else:
+            return 0
+
+    def total_budget_gross_profit(self):
+        if self.has_budget():
+
+            return self.total_budget_income() - self.total_budget_cost()
+        else:
+            return 0
+
+    def total_budget_net_profit(self):
+        if self.has_budget():
+
+            return self.total_budget_gross_profit() - self.total_budget_expense()
+        else:
+            return 0
+
+    def gross_profit_ratio(self):
+        if self.has_budget():
+
+            return self.total_budget_gross_profit() / self.total_budget_income()
+        else:
+            return 0
+
+    def net_profit_ratio(self):
+        if self.has_budget():
+            return self.total_budget_net_profit() / self.total_budget_income()
+        else:
+            return 0
 
     def __str__(self):
         return self.name
@@ -37,8 +89,8 @@ class ProjectFinanceInitialDetail(models.Model):
     contract_asset = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同资产', default=0)
     contract_liability = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同负债', default=0)
     acquisition_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同取得成本', default=0)
-    accumulated_cash_in = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计收合同款', default=0)
-    accumulated_cash_out = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计付合同款', default=0)
+    accumulated_cash_in = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计收款', default=0)
+    accumulated_cash_out = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计付款', default=0)
     accounts_receivable_balance = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收账款', default=0)
     accounts_payable_balance = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应付账款', default=0)
     vat = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='销项税金', default=0)
@@ -84,13 +136,13 @@ class ProjectBudget(models.Model):
     target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
     target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
     target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
-    description = models.TextField(verbose_name="变更说明",blank=True)
-    change_time = models.DateTimeField(null=True, verbose_name='变更时间',blank=True)
+    description = models.TextField(verbose_name="变更说明", blank=True)
+    change_time = models.DateTimeField(null=True, verbose_name='变更时间', blank=True)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
     class Meta:
-        ordering = ['-created', ]
+        ordering = ['created', ]
         verbose_name = '项目预算'
         verbose_name_plural = '项目预算'

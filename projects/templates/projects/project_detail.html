@@ -9,30 +9,55 @@
         {{ project.complete_time|date:'Y年m月d日' }}。{% endif %}</p>
     <p>{{ project.text }}</p>
     <hr>
-
     <h2 class="text-center">项目财务数据</h2>
     <div class="row mb-3 alert alert-secondary">
-        <div class="col-xs-12 col-md-4">
-            <h4 class="text-center">项目当前利润：<span
-                    class="badge badge-primary text-center">{{ project.detail.profit|comma }}</span></h4>
+        <div class="col-xs-4 col-md-4">
+            <p class="text-center">项目当前利润：<span
+                    class="badge badge-primary text-center">{{ project.detail.profit|comma }}</span></p>
         </div>
-        <div class="col-xs-12 col-md-4">
-            <h4 class="text-center">项目净现金流：<span
-                    class="badge badge-primary text-center">{{ project.detail.net_cash_flow|comma }}</span></h4>
+        <div class="col-xs-4 col-md-4">
+            <p class="text-center">项目净现金流：<span
+                    class="badge badge-primary text-center">{{ project.detail.net_cash_flow|comma }}</span></p>
         </div>
-        <div class="col-xs-12 col-md-4 ">
-            <h4 class="text-center">项目增值税：<span class="badge badge-primary">{{ project.detail.net_vat|comma }}</span>
-            </h4>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">项目增值税：<span class="badge badge-primary">{{ project.detail.net_vat|comma }}</span>
+            </p>
+        </div>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">预算总收入：<span
+                    class="badge badge-primary">{{ project.total_budget_income|comma }}</span>
+            </p>
+        </div>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">预算总成本：<span
+                    class="badge badge-primary">{{ project.total_budget_cost|comma }}</span>
+            </p>
+        </div>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">预算管理费用：<span
+                    class="badge badge-primary">{{ project.total_budget_expense|comma }}</span>
+            </p>
+        </div>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">预算净利润：<span
+                    class="badge badge-primary">{{ project.total_budget_net_profit|comma }}</span>
+            </p>
+        </div>
+        <div class="col-xs-4 col-md-4 ">
+            <p class="text-center">净利润率：<span
+                    class="badge badge-primary">{{ project.net_profit_ratio|rate }}</span>
+            </p>
         </div>
     </div>
 
+
     <div class="row mb-3">
         <div class="col-xs-12 col-md">
-            <h3 class="text-center">项目当前数据</h3>
+{#            <h3 class="text-center">项目当前数据</h3>#}
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">内容</th>
+                    <th scope="col">当前数据</th>
                     <th scope="col">金额</th>
                 </tr>
                 </thead>
@@ -101,11 +126,11 @@
         {% if project.detail.is_useful %}
 
             <div class="col-xs-12 col-md">
-                <h3 class="text-center">项目初始数据</h3>
+{#                <h3 class="text-center">项目初始数据</h3>#}
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">内容</th>
+                        <th scope="col">初始数据</th>
                         <th scope="col">金额</th>
                     </tr>
                     </thead>
@@ -175,8 +200,8 @@
     </div>
     <div class="btn-group mb-2" role="group" aria-label="Basic example">
         <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基本信息</a>
-        <a href="{% url 'projects:project_edit_initial' project.id %}" type="button" class="btn btn-success">编辑初始数据</a>
-        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-success">编辑项目预算</a>
+        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
+        <a href="{% url 'projects:project_edit_initial' project.id %}" type="button" class="btn btn-secondary">编辑初始数据</a>
         <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除项目</a>
     </div>
 
@@ -191,13 +216,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    将删除<span class="text-danger">{{ project.name }}项目</span>所关联的所有数据，删除之后不可恢复！
+                    {% if user.is_superuser %}将删除<span class="text-danger">{{ project.name }}项目</span>
+                        所关联的所有数据，删除之后不可恢复！{% else %}删除项目请联系管理员。{% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
                     <form action="{% url 'projects:project_delete' project.id %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">确定</button>
+                        <button type="submit" {% if user.is_superuser %}{% else %}disabled{% endif %}
+                                class="btn btn-danger">确定
+                        </button>
                     </form>
                 </div>
             </div>
@@ -206,8 +234,8 @@
 {% endblock %}
 
 {% block jscode %}
-    $(':text').addClass('form-control');
-    $('textarea').addClass('form-control');
-    $('#id_active').addClass('form-check-input');
-    $('.form-check label').addClass('form-check-label');
+    {#    $(':text').addClass('form-control');#}
+    {#    $('textarea').addClass('form-control');#}
+    {#    $('#id_active').addClass('form-check-input');#}
+    {#    $('.form-check label').addClass('form-check-label');#}
 {% endblock %}

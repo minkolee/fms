@@ -1,45 +1,55 @@
 {% extends 'base/fix-nav.html' %}
+{% load util_tag %}
 
 {% block content %}
     {% include 'base/message.html' %}
+    <h3 class="text-center mt-2">{{ project.name }}预算</h3>
     {% if quantity == 0 %}
-        <p>还没有任何项目，请<a href="{% url 'projects:project_add' %}">新增项目</a></p>
+        <p>无任何预算条目。</p>
     {% else %}
-        <h3 class="text-center mt-2">项目清单</h3>
-        <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2">新增项目</a>
-        <div class="table-responsive-lg">
-            <table class="table table-sm table-hover">
-                <thead>
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">预算条目</th>
+                <th scope="col">目标收入</th>
+                <th scope="col">目标成本</th>
+                <th scope="col">目标利润</th>
+                <th scope="col">管理费用</th>
+                <th scope="col">变更时间</th>
+                <th scope="col">说明</th>
+                <th scope="col">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for budget in budgets %}
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">类型</th>
-                    <th scope="col">名称</th>
-                    <th scope="col">目标收入</th>
-                    <th scope="col">目标成本</th>
-                    <th scope="col">目标利润</th>
-                    <th scope="col">管理费用</th>
-                    <th scope="col">变更时间</th>
-                    <th scope="col">说明</th>
-
+                    <th>{{ forloop.counter }}</th>
+                    <td>{{ budget.cost_type }}</td>
+                    <td>{{ budget.target_revenue|comma }}</td>
+                    <td>{{ budget.target_cost|comma }}</td>
+                    <td>{{ budget.target_profit|comma }}</td>
+                    <td>{{ budget.target_expense|comma }}</td>
+                    <td>{{ budget.change_time|date:'Y年m月d日' }}</td>
+                    <td>{{ budget.description }}</td>
+                    <td><a href="{% url 'projects:project_budget_edit' budget.id %}">编辑</a> | <a
+                            href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger"
+                            disabled="disabled">删除</a></td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for budget in budgets %}
-                    <tr>
-                        <th>{{ forloop.counter }}</th>
-                        <th scope="row"><a href="{% url 'projects:project_detail' budget.project.id %}">{{ budget.project.name }}</a>
-                        </th>
-                        <td>{{ budget.cost_type }}</td>
-                        <td>{{ budget.target_revenue }}</td>
-                        <td>{{ budget.target_cost }}</td>
-                        <td>{{ budget.target_profit }}</td>
-                        <td>{{ budget.target_expense }}</td>
-                        <td>{{ budget.change_time|date:'Y年m月d日' }}</td>
-                        <td>{{ budget.description }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
+
+    <p>
+        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button">添加预算条目</a>
+    </p>
+
+
+{% endblock %}
+
+{% block jscode %}
+    $('input').addClass('form-control');
+    $('textarea').addClass('form-control');
+
 {% endblock %}

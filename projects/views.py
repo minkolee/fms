@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
-from .models import Project, ProjectFinanceInitialDetail
-from .forms import ProjectForm, ProjectInitialDetailForm, ProjectBudget
+from .models import Project, ProjectFinanceInitialDetail, ProjectBudget
+from .forms import ProjectForm, ProjectInitialDetailForm, ProjectBudgetForm
 from django.contrib import messages
 
 
@@ -82,5 +82,59 @@ def edit_initial(request, project_id):
 
 
 def budget(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
     budgets = ProjectBudget.objects.all().filter(project__id=project_id)
-    return render(request, 'projects/project_budget.html', {'budgets': budgets})
+    quantity = budgets.count()
+    return render(request, 'projects/project_budget.html',
+                  {'budgets': budgets, 'quantity': quantity, 'project_id': project_id,
+                   'project': project})
+
+
+def budget_add(request, project_id):
+    if request.method == "GET":
+        form = ProjectBudgetForm()
+        return render(request, 'projects/project_budget_add.html', {'form': form, 'project_id': project_id})
+
+    else:
+        form = ProjectBudgetForm(request.POST)
+        project = get_object_or_404(Project, id=project_id)
+
+        if form.is_valid():
+            current_object = form.save(commit=False)
+            current_object.project = project
+            current_object.save()
+            messages.success(request, '成功添加预算条目')
+            return redirect(reverse('projects:project_budget', args=[project_id, ]))
+        else:
+            return render(request, 'projects/project_budget_add.html', {'form': form, 'project_id': project_id})
+
+
+def budget_edit(request, budget_id):
+    if request.method == "GET":
+        budget_object = get_object_or_404(ProjectBudget, id=budget_id)
+        form = ProjectBudgetForm(instance=budget_object)
+
+        return render(request, 'projects/project_budget_edit.html',
+                      {'form': form, 'budget_id': budget_id, 'project_id': budget_object.project.id})
+
+    else:
+        budget_object = get_object_or_404(ProjectBudget, id=budget_id)
+        form = ProjectBudgetForm(request.POST, instance=budget_object)
+        if form.is_valid():
+            current_object = form.save(commit=False)
+            project_id = int(request.POST.get('project_id'))
+            current_object.project = get_object_or_404(Project, id=project_id)
+            current_object.save()
+            messages.success(request, '成功编辑预算条目:' + budget_object.cost_type)
+            return redirect(reverse('projects:project_budget', args=[project_id, ]))
+        else:
+            return render(request, 'projects/project_budget_edit.html',
+                          {'budget_id': budget_id, 'form': form, 'project_id': budget_object.project.id})
+
+
+def budget_delete(request, project_id, budget_id):
+    budget_object = get_object_or_404(ProjectBudget, id=budget_id)
+    name = budget_object.cost_type
+    budget_object.delete()
+    messages.success(request, "已删除预算条目：" + name)
+    return redirect(reverse('projects:project_budget', args=[project_id, ]))

@@ -48,3 +48,6 @@ class ProjectBudgetForm(forms.ModelForm):
             'change_time',
             'description',
         )
+        widgets = {
+            'change_time': forms.DateInput(format="%Y-%m-%d", attrs={'placeholder': '20YY-MM-DD'}),
+        }
