@@ -1,5 +1,6 @@
 /homepage/migrations/
 /projects/migrations/
+/contracts/migrations/
 /.idea/.gitignore
 /.idea/dataSources/5cadc8aa-4cd2-4c93-b364-0dafd6c069a1.xml
 /.idea/dataSources.xml

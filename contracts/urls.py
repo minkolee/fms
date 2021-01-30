@@ -17,8 +17,12 @@ app_name = 'contracts'
 # 前缀是contract
 
 urlpatterns = [
-    path('initialize/', views.initialize_contract_type, name='contract_type_initial'),
+    path('initialize/contract/', views.initialize_contract_type, name='contract_type_initial'),
+    path('initialize/stamp/', views.initialize_stamp, name='contract_stamp_initial'),
     path('list/<int:project_id>/', views.contract_list, name='contract_list'),
-
+    path('add/<int:project_id>/', views.contract_add, name='contract_add'),
+    path('edit/<int:project_id>/<int:contract_id>/', views.contract_edit, name='contract_edit'),
+    path('delete/<int:project_id>/<int:contract_id>/', views.contract_delete, name='contract_delete'),
+    path('detail/<int:project_id>/<int:contract_id>/', views.contract_detail, name='contract_detail'),
 ]
 

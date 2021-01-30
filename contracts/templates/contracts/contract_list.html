@@ -3,10 +3,12 @@
 {% block content %}
     {% include 'base/message.html' %}
     {% if quantity == 0 %}
-        <p>{{ project.name }}还没有合同，请<a href="#">新增合同</a></p>
+        <p>{{ project.name }}还没有合同，请<a href="{% url 'contracts:contract_add' project.id %}">新增合同</a></p>
     {% else %}
         <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
-        <a href="#" class="btn btn-primary mt-2 mb-2">添加合同</a>
+        <a href="{% url 'contracts:contract_add' project.id %}" class="btn btn-primary mt-2 mb-2">添加合同</a>
+        <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
+        <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">返回项目列表</a>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -22,7 +24,7 @@
                 <tbody>
                 {% for contract in contracts %}
                     <tr>
-                        <th scope="row"><a href="">{{ contract.contract_id }}</a>
+                        <th scope="row"><a href="{% url 'contracts:contract_detail' project.id contract.id %}">{{ contract.contract_id }}</a>
                         </th>
                         <td>{% if contract.contract_name|length > 5 %}
                             {{ contract.contract_name|slice:":6" }}...
@@ -33,7 +35,7 @@
                         <td>{{ contract.contract_type.name }}</td>
                         <td>{{ contract.contract_price|comma }}</td>
                         <td>{{ contract.contract_primary }}</td>
-                        <td><a href="#">编辑</a> | <a href="#">详情</a> | <a href="#">变动</a></td>
+                        <td><a href="#">添加变动记录</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,0 +1,145 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+{% block content %}
+    {% include 'base/message.html' %}
+    <h2>{{ project.name }} - {{ contract.contract_name }}基础信息</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">属性</th>
+            <th scope="col">内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>合同编号</td>
+            <td>{{ contract.contract_id }}</td>
+        </tr>
+        <tr>
+            <td>合同名称</td>
+            <td>{{ contract.contract_name }}</td>
+        </tr>
+        <tr>
+            <td>合同类型</td>
+            <td>{{ contract.contract_type }}</td>
+        </tr>
+        <tr>
+            <td>合同付款条件</td>
+            <td>{{ contract.contract_text }}</td>
+        </tr>
+        <tr>
+            <td>签订日期</td>
+            <td>{{ contract.contract_date|date:'Y年m月d日' }}</td>
+        </tr>
+        <tr>
+            <td>结束日期</td>
+            <td>{{ contract.contract_end_date|date:'Y年m月d日' }}</td>
+        </tr>
+        <tr>
+            <td>合同类别</td>
+            <td>{{ contract.contract_stamp_type }}</td>
+        </tr>
+        <tr>
+            <td>合同标的</td>
+            <td>{{ contract.contract_detail }}</td>
+        </tr>
+        <tr>
+            <td>供应商 </td>
+            <td>{{contract.contract_primary}}
+            {% if contract.contract_secondary1 %}
+                <br>
+            {{ contract.contract_secondary1 }}
+            {% endif %}
+            {% if contract.contract_secondary2 %}
+                <br>
+            {{ contract.contract_secondary2 }}
+            {% endif %}
+            {% if contract.contract_secondary3 %}
+                <br>
+            {{ contract.contract_secondary3 }}
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>联系人</td>
+            <td>{% if contract.contract_contact %}
+            {{ contract.contract_contact }}
+            {% endif %} </td>
+        </tr>
+        <tr>
+            <td>联系电话</td>
+            <td>{% if contract.contract_phone %}
+                {{ contract.contract_phone }}
+            {% endif %} </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 class="text-center">合同财务数据</h2>
+
+    <div class="row mb-3">
+        <div class="col-xs-12 col-md">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">属性</th>
+                    <th scope="col">金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>合同总价</td>
+                    <td>{{contract.contract_price|comma}}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary">编辑合同信息</a>
+
+        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-success">查看本项目合同</a>
+                <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该合同</a>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">删除{{ contract.contract_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if user.is_superuser %}将删除<span class="text-danger"> {{ contract.contract_name }}</span>
+                        相关的所有数据，删除之后不可恢复！{% else %}删除合同请联系管理员。{% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <form action="{% url 'contracts:contract_delete' project.id contract.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" {% if user.is_superuser %}{% else %}disabled{% endif %}
+                                class="btn btn-danger">确定
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block jscode %}
+    {#    $(':text').addClass('form-control');#}
+    {#    $('textarea').addClass('form-control');#}
+    {#    $('#id_active').addClass('form-check-input');#}
+    {#    $('.form-check label').addClass('form-check-label');#}
+
+{% endblock %}

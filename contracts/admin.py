@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import ContractType, Contract
+from .models import ContractType, Contract, Stamp
+
 
 @admin.register(ContractType)
 class ProjectAdmin(admin.ModelAdmin):
@@ -23,6 +24,11 @@ class ProjectAdmin(admin.ModelAdmin):
                     'contract_date',
                     'contract_end_date',
                     'contract_stamp_type',
-                    'contract_contactor',
+                    'contract_contact',
                     'contract_phone',
                     ]
+
+
+@admin.register(Stamp)
+class StampAdmin(admin.ModelAdmin):
+    list_display = ['name', 'rate']
