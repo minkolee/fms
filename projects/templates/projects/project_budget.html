@@ -37,6 +37,26 @@
                             disabled="disabled">删除</a></td>
                 </tr>
             {% endfor %}
+            <tr>
+                <td colspan="2" class="text-primary">合计</td>
+                <td class="text-primary">{{ project.total_budget_income|comma }}</td>
+                <td class="text-primary">{{ project.total_budget_cost|comma }}</td>
+                <td class="text-primary"></td>
+                <td class="text-primary">{{ project.total_budget_expense|comma }}</td>
+                <td class="text-primary"></td>
+                <td class="text-primary"></td>
+                <td class="text-primary"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-danger h5">目标利润 {{project.total_budget_net_profit|comma}}</td>
+                <td colspan="2" class="text-danger h5">利润率 {{ project.net_profit_ratio|rate }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
             </tbody>
         </table>
     {% endif %}

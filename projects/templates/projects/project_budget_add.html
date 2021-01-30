@@ -14,6 +14,7 @@
                         </div>
                     {% endfor %}
                     {% csrf_token %}
+                    <p><small>目标利润可默认为0，会根据成本和收入自动计算利润</small></p>
                     <button class="btn btn-primary" type="submit">提交</button>
                 </form>
             </div>

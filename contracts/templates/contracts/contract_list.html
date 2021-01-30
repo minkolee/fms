@@ -1,0 +1,43 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+{% block content %}
+    {% include 'base/message.html' %}
+    {% if quantity == 0 %}
+        <p>{{ project.name }}还没有合同，请<a href="#">新增合同</a></p>
+    {% else %}
+        <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
+        <a href="#" class="btn btn-primary mt-2 mb-2">添加合同</a>
+        <div class="table-responsive-lg">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">合同编号</th>
+                    <th scope="col">合同名称</th>
+                    <th scope="col">合同类型</th>
+                    <th scope="col">合同总价</th>
+                    <th scope="col">合同方</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for contract in contracts %}
+                    <tr>
+                        <th scope="row"><a href="">{{ contract.contract_id }}</a>
+                        </th>
+                        <td>{% if contract.contract_name|length > 5 %}
+                            {{ contract.contract_name|slice:":6" }}...
+                            {% else %}
+                            {{ contract.contract_name}}
+                            {% endif %}
+                            </td>
+                        <td>{{ contract.contract_type.name }}</td>
+                        <td>{{ contract.contract_price|comma }}</td>
+                        <td>{{ contract.contract_primary }}</td>
+                        <td><a href="#">编辑</a> | <a href="#">详情</a> | <a href="#">变动</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

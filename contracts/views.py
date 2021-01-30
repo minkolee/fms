@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import ContractType
 
 
-# 初始化合同类型的函数，找个链接执行一下即可。考虑将最后一个菜单设置为系统维护。
+# 初始化合同类型的函数，找个链接执行一下即可。考虑将最后一个菜单设置为系统维护，仅仅只有管理员可见。
 def initialize_contract_type(request):
     types = ContractType.objects.all()
 
@@ -25,3 +25,11 @@ def initialize_contract_type(request):
     messages.success(request, '成功初始化合同类型')
 
     return render(request, 'homepage/dashboard.html')
+
+
+def contract_list(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    quantity = project.contracts.count()
+    contracts = project.contracts.all()
+    return render(request, 'contracts/contract_list.html',
+                  {"project": project, 'quantity': quantity, 'contracts': contracts})
