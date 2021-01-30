@@ -26,6 +26,7 @@
                 {% endfor %}
                 {% csrf_token %}
                 <button class="btn btn-primary" type="submit">提交</button>
+                <a class="btn btn-secondary" href="{% url 'projects:project_detail' project.id %}">返回</a>
             </form>
         </div>
         <div class="col-md-3 col-sm-1"></div>

@@ -205,9 +205,9 @@
     <div class="btn-group mb-2" role="group" aria-label="Basic example">
         <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基本信息</a>
         <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
-        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-success">查看项目合同</a>
         <a href="{% url 'projects:project_edit_initial' project.id %}" type="button"
-           class="btn btn-secondary">编辑初始数据</a>
+        class="btn btn-primary">编辑初始数据</a>
+        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-success">查看项目合同</a>
         <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除项目</a>
     </div>
 

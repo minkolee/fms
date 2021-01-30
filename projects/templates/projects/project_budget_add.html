@@ -16,6 +16,8 @@
                     {% csrf_token %}
                     <p><small>目标利润可默认为0，会根据成本和收入自动计算利润</small></p>
                     <button class="btn btn-primary" type="submit">提交</button>
+                    <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-secondary">返回</a>
+
                 </form>
             </div>
             <div class="col-md-3 col-sm-1"></div>
