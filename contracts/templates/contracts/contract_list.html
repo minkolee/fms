@@ -7,6 +7,7 @@
     {% else %}
         <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
         <a href="{% url 'contracts:contract_add' project.id %}" class="btn btn-primary mt-2 mb-2">添加合同</a>
+        <a href="#" class="btn btn-primary mt-2 mb-2">添加非合同变动</a>
         <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
         <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">返回项目列表</a>
         <div class="table-responsive-lg">
