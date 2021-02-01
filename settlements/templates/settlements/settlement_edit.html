@@ -1,0 +1,36 @@
+{% extends 'base/fix-nav.html' %}
+
+{% block content %}
+    <h3 class="text-center">新增{{ contract.contract_name }}的结算记录</h3>
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-1"></div>
+        <div class="col-md">
+            <form action="{% url 'settlements:settlement_edit' settlement.id %}" method="post">
+                {% for field in form %}
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                {% endfor %}
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">提交</button>
+                <a href="{% url 'settlements:settlement_list' contract.id %}" class="btn btn-secondary" >返回</a>
+            </form>
+        </div>
+        <div class="col-md-3 col-sm-1"></div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block jscode %}
+    $('input').addClass('form-control');
+    $(':text').addClass('form-control');
+    $('textarea').addClass('form-control');
+    $('#id_active').addClass('form-check-input');
+    $('.form-check label').addClass('form-check-label');
+    $('select').addClass('form-control');
+    $('#id_contract_price').addClass('form-control');
+{% endblock %}

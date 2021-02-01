@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'projects.apps.ProjectsConfig',
     'contracts.apps.ContractsConfig',
+    'settlements.apps.SettlementsConfig',
 ]
 
 MIDDLEWARE = [

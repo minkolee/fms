@@ -76,6 +76,6 @@ class Contract(models.Model):
         return self.contract_project.name + '-' + self.contract_name
 
     class Meta:
-        ordering = ['-created', ]
+        ordering = ['created', ]
         verbose_name = '合同'
         verbose_name_plural = '合同'
