@@ -6,6 +6,7 @@ class IncomeSettlementForm(forms.ModelForm):
     class Meta:
         model = IncomeSettlement
         fields = (
+            'name',
             'settle_prepayment',
             'settle_design',
             'settle_management',

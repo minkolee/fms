@@ -3,6 +3,8 @@ from contracts.models import Contract
 
 
 class IncomeSettlement(models.Model):
+
+    name = models.CharField(max_length=255, verbose_name="结算说明")
     # 应结算款部分
     settle_prepayment = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-预付款项', default=0)
     settle_design = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-设计服务', default=0)
@@ -55,5 +57,5 @@ class IncomeSettlement(models.Model):
 
     class Meta:
         ordering = ['created', ]
-        verbose_name = '结算记录'
-        verbose_name_plural = '结算记录'
+        verbose_name = '结算记录-收入'
+        verbose_name_plural = '结算记录-收入'
