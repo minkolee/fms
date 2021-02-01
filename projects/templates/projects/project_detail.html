@@ -114,6 +114,11 @@
                 </tr>
 
                 <tr>
+                    <td>预付分包款</td>
+                    <td>{{ project.detail.accounts_prepaid_balance|comma }}</td>
+                </tr>
+
+                <tr>
                     <td>销项税金</td>
                     <td>{{ project.detail.vat|comma }}</td>
                 </tr>
@@ -184,6 +189,11 @@
                     <tr>
                         <td>应付账款</td>
                         <td>{{ project.detail.accounts_payable_balance|comma }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>预付分包款</td>
+                        <td>{{ project.detail.accounts_prepaid_balance|comma }}</td>
                     </tr>
 
                     <tr>

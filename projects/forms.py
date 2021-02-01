@@ -31,6 +31,7 @@ class ProjectInitialDetailForm(forms.ModelForm):
             'accumulated_cash_out',
             'accounts_receivable_balance',
             'accounts_payable_balance',
+            'accounts_prepaid_balance',
             'vat',
             'vat_input'
         )

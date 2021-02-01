@@ -93,6 +93,7 @@ class ProjectFinanceInitialDetail(models.Model):
     accumulated_cash_out = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计付款', default=0)
     accounts_receivable_balance = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收账款', default=0)
     accounts_payable_balance = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应付账款', default=0)
+    accounts_prepaid_balance = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='预付分包款', default=0)
     vat = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='销项税金', default=0)
     vat_input = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='进项税金', default=0)
 
