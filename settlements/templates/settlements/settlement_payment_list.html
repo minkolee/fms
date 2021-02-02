@@ -9,7 +9,7 @@
         <a href="{% url 'projects:project_detail' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
     {% else %}
         <h3 class="text-center mt-2">{{ contract.contract_name }} 支付结算记录</h3>
-        <a href="{% url 'settlements:settlement_payment_add' contract.id %}" class="btn btn-primary mt-2 mb-2">添加结算记录</a>
+        <a href="{% url 'settlements:settlement_payment_add' contract.id %}" class="btn btn-primary mt-2 mb-2">添加付款结算记录</a>
         <a href="{% url 'contracts:contract_list' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">返回合同列表</a>
         <a href="{% url 'projects:project_detail' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
         <div class="table-responsive-lg">
