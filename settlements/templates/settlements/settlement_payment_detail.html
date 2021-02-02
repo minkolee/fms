@@ -2,7 +2,7 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
-    <h2 class="text-center">{{ contract.contract_name }} 收款结算记录 - {{ settlement.name }}</h2>
+    <h2 class="text-center">{{ contract.contract_name }} 支付结算记录 - {{ settlement.name }}</h2>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -12,29 +12,21 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center ver" rowspan="6">应收结算款</td>
+            <td class="text-center ver" rowspan="4">应付结算款</td>
             <td>预付款项</td>
-            <td>{{ settlement.settle_prepayment|comma }}</td>
+            <td>{{ settlement.payment_prepaid|comma }}</td>
         </tr>
         <tr>
-            <td>设计服务</td>
-            <td>{{ settlement.settle_design|comma }}</td>
+            <td>合同款</td>
+            <td>{{ settlement.payment_normal|comma }}</td>
         </tr>
         <tr>
-            <td>管理服务</td>
-            <td>{{ settlement.settle_management|comma }}</td>
+            <td>其他</td>
+            <td>{{ settlement.payment_other|comma }}</td>
         </tr>
         <tr>
-            <td>材料销售</td>
-            <td>{{ settlement.settle_material|comma }}</td>
-        </tr>
-        <tr>
-            <td>工程服务</td>
-            <td>{{ settlement.settle_construction|comma }}</td>
-        </tr>
-        <tr>
-            <td class="text-primary"><b>应结算合计</b></td>
-            <td class="text-primary"><b>{{ settlement.receivable|comma }}</b></td>
+            <td class="text-primary"><b>应支付合计</b></td>
+            <td class="text-primary"><b>{{ settlement.payment_total|comma }}</b></td>
         </tr>
 
         <tr>
@@ -60,46 +52,50 @@
         </tr>
 
         <tr>
-            <td class="text-primary text-center" colspan="2"><B>实际应收结算款</B></td>
-            <td class="text-primary"><b>{{ settlement.real_receivable|comma }}</b></td>
+            <td class="text-primary text-center" colspan="2"><B>实际应付结算款</B></td>
+            <td class="text-primary"><b>{{ settlement.real_payable|comma }}</b></td>
         </tr>
 
         <tr>
-            <td class="text-center ver" rowspan="6">实际收款</td>
-            <td>预收款</td>
-            <td>{{ settlement.received_prepayment|comma }}</td>
+            <td class="text-center ver" rowspan="7">实际付款</td>
+            <td>预付款</td>
+            <td>{{ settlement.payment_real_prepaid|comma }}</td>
         </tr>
         <tr>
-            <td>进度款</td>
-            <td>{{ settlement.received_normal|comma }}</td>
+            <td>工程款</td>
+            <td>{{ settlement.payment_real_normal|comma }}</td>
         </tr>
         <tr>
-            <td>质保金</td>
-            <td>{{ settlement.received_warranty|comma }}</td>
+            <td>材料款</td>
+            <td>{{ settlement.payment_real_material|comma }}</td>
         </tr>
         <tr>
-            <td>奖励款</td>
-            <td>{{ settlement.received_bonus|comma }}</td>
+            <td>租赁款</td>
+            <td>{{ settlement.payment_real_rent|comma }}</td>
+        </tr>
+        <tr>
+            <td>设计费</td>
+            <td>{{ settlement.payment_real_design|comma }}</td>
         </tr>
         <tr>
             <td>其他</td>
-            <td>{{ settlement.received_other|comma }}</td>
+            <td>{{ settlement.payment_real_other|comma }}</td>
         </tr>
         <tr>
-            <td class="text-primary"><b>实际收款合计</b></td>
-            <td class="text-primary"><b>{{ settlement.reception|comma }}</b></td>
+            <td class="text-primary"><b>实际付款合计</b></td>
+            <td class="text-primary"><b>{{ settlement.total_paid|comma }}</b></td>
         </tr>
         <tr>
             <td class="text-primary text-center" colspan="2"><B>余款</B></td>
-            <td class="text-primary"><b>{{ settlement.not_received_yet|comma }}</b></td>
+            <td class="text-primary"><b>{{ settlement.not_paid_yet|comma }}</b></td>
         </tr>
         </tbody>
     </table>
 
 
     <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'settlements:settlement_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
-        <a href="{% url 'settlements:settlement_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
+        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
+        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
         <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
     </div>
 

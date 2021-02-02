@@ -5,7 +5,7 @@
     <div class="row mb-3">
         <div class="col-md-3 col-sm-1"></div>
         <div class="col-md">
-            <form action="{% url 'settlements:settlement_edit' settlement.id %}" method="post">
+            <form action="{% url 'settlements:settlement_payment_edit' settlement.id %}" method="post">
                 {% for field in form %}
                         <div class="form-group">
                             {{ field.errors }}
@@ -15,7 +15,7 @@
                 {% endfor %}
                 {% csrf_token %}
                 <button class="btn btn-primary" type="submit">提交</button>
-                <a href="{% url 'settlements:settlement_list' contract.id %}" class="btn btn-secondary" >返回</a>
+                <a href="{% url 'settlements:settlement_payment_list' contract.id %}" class="btn btn-secondary" >返回</a>
             </form>
         </div>
         <div class="col-md-3 col-sm-1"></div>

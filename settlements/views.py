@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from .models import IncomeSettlement
+from .models import IncomeSettlement, PaymentSettlement
 from contracts.models import Contract
-from .forms import IncomeSettlementForm
+from .forms import IncomeSettlementForm, PaymentSettlementForm
 from django.contrib import messages
 
 
-# 列出合同对应的全部结算记录
+# 列出合同对应的全部收入结算记录
 def settlement_list(request, contract_id):
     contract = get_object_or_404(Contract, id=contract_id)
     settlements = contract.settlements.all()
@@ -14,7 +14,16 @@ def settlement_list(request, contract_id):
                   {'settlements': settlements, 'contract': contract, 'quantity': quantity})
 
 
-# 添加结算记录
+# 列出合同对应的全部支付结算记录
+def settlement_payment_list(request, contract_id):
+    contract = get_object_or_404(Contract, id=contract_id)
+    settlements = contract.settlements_payment.all()
+    quantity = settlements.count()
+    return render(request, 'settlements/settlement_payment_list.html',
+                  {'settlements': settlements, 'contract': contract, 'quantity': quantity})
+
+
+# 添加收入结算记录
 def settlement_add(request, contract_id):
     contract = get_object_or_404(Contract, id=contract_id)
     if request.method == "GET":
@@ -27,12 +36,30 @@ def settlement_add(request, contract_id):
             current_object = form.save(commit=False)
             current_object.contract = contract
             current_object.save()
-            messages.success(request, '成功添加结算记录')
+            messages.success(request, '成功添加收款结算记录')
             return redirect(reverse('settlements:settlement_list', args=[contract.id, ]))
         return render(request, 'settlements/settlement_add.html', {'contract': contract, 'form': form})
 
 
-# 修改记录
+# 付款合同的添加
+def settlement_payment_add(request, contract_id):
+    contract = get_object_or_404(Contract, id=contract_id)
+    if request.method == "GET":
+        form = PaymentSettlementForm()
+        return render(request, 'settlements/settlement_payment_add.html', {'contract': contract, 'form': form})
+
+    else:
+        form = PaymentSettlementForm(request.POST)
+        if form.is_valid():
+            current_object = form.save(commit=False)
+            current_object.contract = contract
+            current_object.save()
+            messages.success(request, '成功添加付款结算记录')
+            return redirect(reverse('settlements:settlement_payment_list', args=[contract.id, ]))
+        return render(request, 'settlements/settlement_payment_add.html', {'contract': contract, 'form': form})
+
+
+# 编辑修改收入记录
 def settlement_edit(request, settlement_id):
     settlement = get_object_or_404(IncomeSettlement, id=settlement_id)
     contract = settlement.contract
@@ -48,7 +75,7 @@ def settlement_edit(request, settlement_id):
             current_object.contract = contract
             current_object.save()
 
-            messages.success(request, '成功修改结算记录')
+            messages.success(request, '成功修改收款结算记录')
             return redirect(reverse('settlements:settlement_detail', args=[settlement.id, ]))
 
         else:
@@ -56,7 +83,31 @@ def settlement_edit(request, settlement_id):
                           {'form': form, 'contract': contract, 'settlement': settlement})
 
 
-# 结算记录详情
+# 编辑修改支付记录
+def settlement_payment_edit(request, settlement_id):
+    settlement = get_object_or_404(PaymentSettlement, id=settlement_id)
+    contract = settlement.contract
+
+    if request.method == "GET":
+        form = PaymentSettlementForm(instance=settlement)
+        return render(request, 'settlements/settlement_payment_edit.html',
+                      {'form': form, 'contract': contract, 'settlement': settlement})
+    else:
+        form = PaymentSettlementForm(request.POST, instance=settlement)
+        if form.is_valid():
+            current_object = form.save(commit=False)
+            current_object.contract = contract
+            current_object.save()
+
+            messages.success(request, '成功修改支付结算记录')
+            return redirect(reverse('settlements:settlement_payment_detail', args=[settlement.id, ]))
+
+        else:
+            return render(request, 'settlements/settlement_payment_edit.html',
+                          {'form': form, 'contract': contract, 'settlement': settlement})
+
+
+# 收入结算记录详情
 def settlement_detail(request, settlement_id):
     settlement = get_object_or_404(IncomeSettlement, id=settlement_id)
     contract = settlement.contract
@@ -64,7 +115,15 @@ def settlement_detail(request, settlement_id):
     return render(request, 'settlements/settlement_detail.html', {'settlement': settlement, 'contract': contract})
 
 
-# 删除结算记录
+# 付款结算记录详情
+def settlement_payment_detail(request, settlement_id):
+    settlement = get_object_or_404(PaymentSettlement, id=settlement_id)
+    contract = settlement.contract
+
+    return render(request, 'settlements/settlement_payment_detail.html', {'settlement': settlement, 'contract': contract})
+
+
+# 删除收入结算记录
 def settlement_delete(request, settlement_id):
     if request.method == "POST":
         settlement = get_object_or_404(IncomeSettlement, id=settlement_id)

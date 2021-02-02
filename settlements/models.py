@@ -3,14 +3,13 @@ from contracts.models import Contract
 
 
 class IncomeSettlement(models.Model):
-
     name = models.CharField(max_length=255, verbose_name="结算说明")
     # 应结算款部分
-    settle_prepayment = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-预付款项', default=0)
-    settle_design = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-设计服务', default=0)
-    settle_management = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-管理服务', default=0)
-    settle_material = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-材料销售', default=0)
-    settle_construction = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应结算款-工程服务', default=0)
+    settle_prepayment = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收结算款-预付款项', default=0)
+    settle_design = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收结算款-设计服务', default=0)
+    settle_management = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收结算款-管理服务', default=0)
+    settle_material = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收结算款-材料销售', default=0)
+    settle_construction = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应收结算款-工程服务', default=0)
 
     # 合计应结算款项
     def receivable(self):
@@ -44,18 +43,79 @@ class IncomeSettlement(models.Model):
 
     # 未收款
     def not_received_yet(self):
-        return self.real_receivable()-self.reception()
+        return self.real_receivable() - self.reception()
 
     # 连接到某个合同的外键
-    contract = models.ForeignKey(Contract, related_name='settlements', verbose_name="结算记录", on_delete=models.CASCADE)
+    contract = models.ForeignKey(Contract, related_name='settlements', verbose_name="结算记录-收入",
+                                 on_delete=models.CASCADE)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
     def __str__(self):
-        return '结算'
+        return '结算记录-收入'
 
     class Meta:
         ordering = ['created', ]
         verbose_name = '结算记录-收入'
         verbose_name_plural = '结算记录-收入'
+
+
+class PaymentSettlement(models.Model):
+    name = models.CharField(max_length=255, verbose_name="结算说明")
+
+    # 应支付给供应商的款
+    payment_prepaid = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应付结算款-预付款项', default=0)
+    payment_normal = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应付结算款-合同款', default=0)
+    payment_other = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='应付结算款-其他', default=0)
+
+    # 支付合计
+    def payment_total(self):
+        return self.payment_prepaid + self.payment_normal + self.payment_other
+
+    # 扣款部分
+    deduction_prepayment = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='扣款-预付款项', default=0)
+    deduction_warranty = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='扣款-质保金', default=0)
+    deduction_damage = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='扣款-违约金', default=0)
+    deduction_other = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='扣款-其他扣款', default=0)
+
+    # 合计扣款
+    def deduction(self):
+        return self.deduction_prepayment + self.deduction_warranty + self.deduction_damage + self.deduction_other
+
+    # 实际付款
+    payment_real_prepaid = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-预付款',
+                                               default=0)
+    payment_real_normal = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-工程款', default=0)
+    payment_real_material = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-材料款', default=0)
+    payment_real_rent = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-租赁款', default=0)
+    payment_real_design = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-设计费', default=0)
+    payment_real_other = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='实际付款-其他', default=0)
+
+    # 实际应支付结算款
+    def real_payable(self):
+        return self.payment_total() - self.deduction()
+
+    # 实际付款合计
+    def total_paid(self):
+        return self.payment_real_prepaid + self.payment_real_normal + \
+               self.payment_real_material + self.payment_real_rent + self.payment_real_design + self.payment_real_other
+
+    # 未付余额
+    def not_paid_yet(self):
+        return self.real_payable() - self.total_paid()
+
+    # 合同外键
+    contract = models.ForeignKey(Contract, related_name='settlements_payment', verbose_name="结算记录-支出",
+                                 on_delete=models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
+    updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+
+    def __str__(self):
+        return '结算记录-支付'
+
+    class Meta:
+        ordering = ['created', ]
+        verbose_name = '结算记录-支付'
+        verbose_name_plural = '结算记录-支付'

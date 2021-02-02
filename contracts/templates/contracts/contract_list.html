@@ -36,7 +36,7 @@
                         <td>{{ contract.contract_type.name }}</td>
                         <td>{{ contract.contract_price|comma }}</td>
                         <td>{{ contract.contract_primary }}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">结算</a> | <a href="#">其他变动</a></td>
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a href="#">其他变动</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
