@@ -15,5 +15,5 @@ urlpatterns = [
     path('add_payment/<int:contract_id>/', views.settlement_payment_add, name='settlement_payment_add'),
     path('edit_payment/<int:settlement_id>/', views.settlement_payment_edit, name='settlement_payment_edit'),
     path('detail_payment/<int:settlement_id>/', views.settlement_payment_detail, name='settlement_payment_detail'),
-    # path('delete_payment/<int:settlement_id>/', views.settlement_payment_delete, name='settlement_payment_delete'),
+    path('delete_payment/<int:settlement_id>/', views.settlement_payment_delete, name='settlement_payment_delete'),
 ]

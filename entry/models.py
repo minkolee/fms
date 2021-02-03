@@ -37,3 +37,19 @@ class Entry(models.Model):
 
     # 货币资金
     cash = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='货币资金', default=0)
+
+    # 为了找平而设置的其他资产和负债和损益
+    others_asset = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='其他资产', default=0)
+    others_liability = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='其他负债', default=0)
+    others_profit_loss = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='其他损益', default=0)
+
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
+    updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+
+    def __str__(self):
+        return self.project.name + "变动记录"
+
+    class Meta:
+        ordering = ['created', ]
+        verbose_name = '变动记录'
+        verbose_name_plural = '变动记录'

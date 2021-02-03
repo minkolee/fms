@@ -92,11 +92,10 @@
         </tbody>
     </table>
 
-
     <div class="btn-group mb-2" role="group" aria-label="Basic example">
         <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
         <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
-        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
+        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -115,7 +114,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                    <form action="{% url 'settlements:settlement_delete' settlement.id %}" method="post">
+                    <form action="{% url 'settlements:settlement_payment_delete' settlement.id %}" method="post">
                         {% csrf_token %}
                         <button type="submit" {% if user.is_superuser %}{% else %}disabled{% endif %}
                                 class="btn btn-danger">确定

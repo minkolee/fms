@@ -120,7 +120,8 @@ def settlement_payment_detail(request, settlement_id):
     settlement = get_object_or_404(PaymentSettlement, id=settlement_id)
     contract = settlement.contract
 
-    return render(request, 'settlements/settlement_payment_detail.html', {'settlement': settlement, 'contract': contract})
+    return render(request, 'settlements/settlement_payment_detail.html',
+                  {'settlement': settlement, 'contract': contract})
 
 
 # 删除收入结算记录
@@ -129,8 +130,21 @@ def settlement_delete(request, settlement_id):
         settlement = get_object_or_404(IncomeSettlement, id=settlement_id)
         contract_id = settlement.contract.id
         settlement.delete()
-        messages.success(request, '成功删除结算记录')
+        messages.success(request, '成功删除收款结算记录')
         return redirect(reverse('settlements:settlement_list', args=[contract_id, ]))
 
     else:
         return redirect(reverse('settlements:settlement_detail', args=[settlement_id, ]))
+
+
+# 删除支付结算记录
+def settlement_payment_delete(request, settlement_id):
+    if request.method == "POST":
+        settlement = get_object_or_404(PaymentSettlement, id=settlement_id)
+        contract_id = settlement.contract.id
+        settlement.delete()
+        messages.success(request, '成功删除付款结算记录')
+        return redirect(reverse('settlements:settlement_payment_list', args=[contract_id, ]))
+
+    else:
+        return redirect(reverse('settlements:settlement_payment_edit', args=[settlement_id, ]))
