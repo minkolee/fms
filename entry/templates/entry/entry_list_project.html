@@ -1,0 +1,39 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+{% block content %}
+    {% include 'base/message.html' %}
+    {% if quantity == 0 %}
+        <p>{{ project.name }}还没有变动记录，请<a href="#">新增记录</a></p>
+    {% else %}
+        <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
+        <a href="#" class="btn btn-primary mt-2 mb-2">添加非合同变动</a>
+        <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
+        <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">返回项目列表</a>
+        <div class="table-responsive-lg">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">说明</th>
+                    <th scope="col">凭证号</th>
+                    <th scope="col">金额1</th>
+                    <th scope="col">金额2</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{ entry.description }}</td>
+                        <td>{{ entry.note }}</td>
+                        <td>{{ entry.project }}</td>
+                        <td>{{ entry.revenue }}</td>
+                        <td><a href="#">待定</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

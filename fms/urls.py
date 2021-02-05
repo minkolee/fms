@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    path('entry/', include('entry.urls')),
     path('settlement/', include('settlements.urls')),
     path('project/', include('projects.urls')),
     path('contract/', include('contracts.urls')),

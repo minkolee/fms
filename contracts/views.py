@@ -19,7 +19,7 @@ def initialize_contract_type(request):
         for each_type in types:
             each_type.delete()
 
-        for i in range(1, 5):
+        for i in range(1, len(names) + 1):
             con = ContractType()
             con.id = i
             con.name = names[i]
@@ -54,7 +54,7 @@ def initialize_stamp(request):
         for each_type in types:
             each_type.delete()
 
-        for i in range(1, 13):
+        for i in range(1, len(names) + 1):
             con = Stamp()
             con.id = i
             con.name = names[i][0]

@@ -1,18 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 app_name = 'entry'
 
 urlpatterns = [
-    # path('list/<int:contract_id>/', views.settlement_list, name='settlement_list'),
-    # path('add_income/<int:contract_id>/', views.settlement_add, name='settlement_add'),
-    # path('edit_income/<int:settlement_id>/', views.settlement_edit, name='settlement_edit'),
-    # path('detail_income/<int:settlement_id>/', views.settlement_detail, name='settlement_detail'),
-    # path('delete_income/<int:settlement_id>/', views.settlement_delete, name='settlement_delete'),
-    #
-    # path('list_payment/<int:contract_id>/', views.settlement_payment_list, name='settlement_payment_list'),
-    # path('add_payment/<int:contract_id>/', views.settlement_payment_add, name='settlement_payment_add'),
-    # path('edit_payment/<int:settlement_id>/', views.settlement_payment_edit, name='settlement_payment_edit'),
-    # path('detail_payment/<int:settlement_id>/', views.settlement_payment_detail, name='settlement_payment_detail'),
-    # path('delete_payment/<int:settlement_id>/', views.settlement_payment_delete, name='settlement_payment_delete'),
+    # 列出某个项目所有的变动记录
+    path('list/project/<int:project_id>/', views.entry_list_project, name='project_entry_list'),
+
+    # 用于添加属于项目，不属于合同的变动
+    # path('add/p/<int:project_id>/', views.settlement_add, name='settlement_add'),
+    # 添加属于项目和属于合同，但没有结算的变动
+    # path('add/p/<int:project_id>/c/<int:contract_id>', views.settlement_add, name='settlement_add'),
+    # 添加属于结算的变动
+    # path('add/p/<int:project_id>/c/<int:contract_id>/s/<int:settlement_id>', views.settlement_add, name='settlement_add'),
 ]
