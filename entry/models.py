@@ -29,8 +29,8 @@ class Entry(models.Model):
                                            on_delete=models.CASCADE, blank=True, null=True)
 
     # 与项目数据保持一致
-    revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计确认收入', default=0)
-    cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='累计确认成本', default=0)
+    revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='确认收入', default=0)
+    cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='确认成本', default=0)
     capitalized_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同履约成本', default=0)
     contract_asset = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同资产', default=0)
     contract_liability = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同负债', default=0)
