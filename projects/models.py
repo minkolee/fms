@@ -17,11 +17,14 @@ class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
-    def has_budget(self):
-        return self.budget.count() != 0
+    def get_entry_add_url(self):
+        return reverse('entry:entry_add_project') + "?p={}".format(self.id)
 
     def get_absolute_url(self):
-        return reverse('projects:project_detail', args=[self.id])
+        return reverse('projects:project_detail', args=[self.id, ])
+
+    def has_budget(self):
+        return self.budget.count() != 0
 
     def total_budget_income(self):
         if self.has_budget():

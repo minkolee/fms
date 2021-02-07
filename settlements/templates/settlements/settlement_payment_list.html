@@ -36,7 +36,7 @@
                         <td>{{ settlement.total_paid|comma }}</td>
                         <td>{{ settlement.not_paid_yet|comma }}</td>
                         <td><a href="{% url 'settlements:settlement_payment_detail' settlement.id %}">详情</a> | <a
-                                href="{% url 'settlements:settlement_payment_edit' settlement.id %}">编辑</a> | <a href="">变动</a>
+                                href="{% url 'settlements:settlement_payment_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动</a>
                         </td>
                     </tr>
                 {% endfor %}

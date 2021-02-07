@@ -3,33 +3,38 @@
 {% block content %}
     {% include 'base/message.html' %}
     {% if quantity == 0 %}
-        <p>{{ project.name }}还没有变动记录，请<a href="#">新增记录</a></p>
+        <p>{{ project.name }}还没有变动记录，请<a href="{{ project.get_entry_add_url }}">新增记录</a></p>
     {% else %}
-        <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
-        <a href="#" class="btn btn-primary mt-2 mb-2">添加非合同变动</a>
+        <h3 class="text-center mt-2">{{ project.name }}变动记录清单</h3>
+        <a href="{{ project.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2">添加非合同变动</a>
         <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
-        <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">返回项目列表</a>
+        <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-secondary mt-2 mb-2">返回合同列表</a>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">说明</th>
-                    <th scope="col">凭证号</th>
-                    <th scope="col">金额1</th>
-                    <th scope="col">金额2</th>
+                    <th scope="col">所属合同</th>
+                    <th scope="col">所属结算</th>
+                    <th scope="col">借方合计</th>
+                    <th scope="col">贷方合计</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for entry in entries %}
                     <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        <td>{{ entry.description }}</td>
-                        <td>{{ entry.note }}</td>
-                        <td>{{ entry.project }}</td>
-                        <td>{{ entry.revenue }}</td>
-                        <td><a href="#">待定</a></td>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{% if entry.contract %}<a href="{{ entry.contract.get_absolute_url }}">
+                            {{ entry.contract.contract_name|slice:"10" }}...{% endif %}</a></td>
+                        <td>{% if entry.income_settlement %}
+                            <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name }}</a>{% endif %}
+                            {% if entry.payment_settlement %}
+                                <a href="{{ entry.payment_settlement.get_absolute_url }}">{{ entry.payment_settlement.name }}</a>{% endif %}
+                        </td>
+                        <td>{{ entry.total_debit_side|comma }}</td>
+                        <td>{{ entry.total_credit_side|comma }}</td>
+                        <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,20 +1,22 @@
 from django.db import models
 from projects.models import Project
+from contracts.models import Contract
 from settlements.models import PaymentSettlement, IncomeSettlement
+from django.urls import reverse
 
 
 class Entry(models.Model):
     # 变动描述
-    description = models.CharField(max_length=255, blank=True, null=True, verbose_name='变动描述')
+    description = models.CharField(max_length=255, verbose_name='变动描述')
 
     # 凭证号
-    note = models.CharField(max_length=255, blank=True, null=True, verbose_name='变动描述')
+    note = models.CharField(max_length=255, verbose_name='凭证号')
 
     # 项目外键不能为空
     project = models.ForeignKey(Project, verbose_name='关联项目', related_name='project_entries', on_delete=models.CASCADE)
 
     # 合同外键可以为空，但项目不能为空，表示无合同付款
-    contract = models.ForeignKey(Project, verbose_name='关联合同', related_name='contract_entries',
+    contract = models.ForeignKey(Contract, verbose_name='关联合同', related_name='contract_entries',
                                  on_delete=models.CASCADE,
                                  blank=True, null=True)
 
@@ -52,6 +54,15 @@ class Entry(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
+    def total_debit_side(self):
+        return self.cost + self.others_profit_loss + self.cash + self.capitalized_cost + self.contract_asset + self.acquisition_cost + self.accounts_receivable + self.accounts_prepaid + self.vat_input + self.others_asset
+
+    def total_credit_side(self):
+        return self.revenue + self.contract_liability + self.accounts_payable + self.vat + self.others_liability
+
+    def is_balanced(self):
+        return self.total_debit_side() - self.total_credit_side() == 0
+
     def __str__(self):
         return self.project.name + "变动记录"
 
@@ -59,3 +70,6 @@ class Entry(models.Model):
         ordering = ['created', ]
         verbose_name = '变动记录'
         verbose_name_plural = '变动记录'
+
+    def get_absolute_url(self):
+        return reverse('entry:entry_detail', args=[self.id, ])

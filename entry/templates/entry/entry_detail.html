@@ -1,0 +1,163 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+{% block content %}
+    {% include 'base/message.html' %}
+    <h2 class="text-center">{{ entry.project.name }} 变动记录详情</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col" class="text-center" colspan="2">类别</th>
+            <th scope="col">详情或金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center" rowspan="5">基础信息</td>
+            <td>所属项目</td>
+            <td><a href="{{ entry.project.get_absolute_url }}">{{ entry.project.name }}</a></td>
+        </tr>
+        <tr>
+            <td>所属合同</td>
+            <td>{% if entry.contract %}
+                <a href="{{ entry.contract.get_absolute_url }}">{{ entry.contract.contract_name }}</a>
+            {% endif %} </td>
+        </tr>
+        <tr>
+            <td>所属结算</td>
+            <td>
+                {% if entry.income_settlement %}
+                    <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name|slice:'6' }}</a>
+                {% endif %}
+                {% if entry.income_settlement %}
+                    <a href="{{ entry.payment_settlement.get_absolute_url }}">{{ entry.payment_settlement.name|slice:'6' }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>说明</td>
+            <td>{{ entry.description }}</td>
+        </tr>
+        <tr>
+            <td>凭证号</td>
+            <td>{{ entry.note }}</td>
+        </tr>
+
+
+        <tr>
+            <td class="text-center" rowspan="3">损益</td>
+            <td>营业收入</td>
+            <td>{{ entry.revenue }}</td>
+        </tr>
+        <tr>
+            <td>营业成本</td>
+            <td>{{ entry.cost }}</td>
+        </tr>
+        <tr>
+            <td>其他损益</td>
+            <td>{{ entry.others_profit_loss }}</td>
+        </tr>
+        <tr>
+            <td class="text-center" rowspan="8">资产类</td>
+            <td>货币资金</td>
+            <td>{{ entry.cash }}</td>
+        </tr>
+        <tr>
+            <td>合同履约成本</td>
+            <td>{{ entry.capitalized_cost }}</td>
+        </tr>
+
+        <tr>
+            <td>合同资产</td>
+            <td>{{ entry.contract_asset }}</td>
+        </tr>
+
+        <tr>
+            <td>合同取得成本</td>
+            <td>{{ entry.acquisition_cost }}</td>
+        </tr>
+
+        <tr>
+            <td>应收账款</td>
+            <td>{{ entry.accounts_receivable }}</td>
+        </tr>
+
+        <tr>
+            <td>预付账款</td>
+            <td>{{ entry.accounts_prepaid }}</td>
+        </tr>
+
+        <tr>
+            <td>进项税金</td>
+            <td>{{ entry.vat_input }}</td>
+        </tr>
+
+            <tr>
+            <td>其他资产</td>
+            <td>{{ entry.others_asset }}</td>
+        </tr>
+
+        <tr>
+            <td class="text-center" rowspan="4">负债类</td>
+            <td>合同负债</td>
+            <td>{{entry.contract_liability}}</td>
+        </tr>
+
+        <tr>
+            <td>应付账款</td>
+            <td>{{ entry.accounts_payable }}</td>
+        </tr>
+
+
+        <tr>
+            <td>销项税金</td>
+            <td>{{entry.vat}}</td>
+        </tr>
+
+            <tr>
+            <td>其他负债</td>
+            <td>{{entry.others_liability}}</td>
+        </tr>
+
+    </table>
+
+
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'entry:entry_edit' entry.id %}" type="button" class="btn btn-primary">编辑变动记录</a>
+        <a href="{% url 'entry:project_entry_list' entry.project.id %}" type="button" class="btn btn-secondary">返回变动列表</a>
+        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">删除该结算记录</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if user.is_superuser %}将删除 该结算记录
+                        相关的所有数据，删除之后不可恢复！{% else %}删除结算记录请联系管理员。{% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <form action="{% url 'entry:entry_delete' entry.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" {% if user.is_superuser %}{% else %}disabled{% endif %}
+                                class="btn btn-danger">确定
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block jscode %}
+
+{% endblock %}

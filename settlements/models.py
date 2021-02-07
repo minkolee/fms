@@ -1,5 +1,6 @@
 from django.db import models
 from contracts.models import Contract
+from django.urls import reverse
 
 
 class IncomeSettlement(models.Model):
@@ -55,10 +56,17 @@ class IncomeSettlement(models.Model):
     def __str__(self):
         return '结算记录-收入'
 
+    def get_absolute_url(self):
+        return reverse('settlements:settlement_detail', args=[self.id, ])
+
     class Meta:
         ordering = ['created', ]
         verbose_name = '结算记录-收入'
         verbose_name_plural = '结算记录-收入'
+
+    def get_entry_add_url(self):
+        return reverse('entry:entry_add_project') + "?p={}&c={}&si={}".format(self.contract.contract_project.id,
+                                                                                   self.contract.id, self.id)
 
 
 class PaymentSettlement(models.Model):
@@ -119,3 +127,10 @@ class PaymentSettlement(models.Model):
         ordering = ['created', ]
         verbose_name = '结算记录-支付'
         verbose_name_plural = '结算记录-支付'
+
+    def get_absolute_url(self):
+        return reverse('settlements:settlement_payment_detail', args=[self.id, ])
+
+    def get_entry_add_url(self):
+        return reverse('entry:entry_add_project') + "?p={}&c={}&so={}".format(self.contract.contract_project.id,
+                                                                                   self.contract.id, self.id)

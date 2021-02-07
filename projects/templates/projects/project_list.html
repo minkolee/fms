@@ -23,7 +23,7 @@
                 {% for project in projects %}
                     <tr>
                         <th>{{ forloop.counter }}</th>
-                        <th scope="row"><a href="{% url 'projects:project_detail' project.id %}">{{ project.name }}</a>
+                        <th scope="row"><a href="{{ project.get_absolute_url}}">{{ project.name }}</a>
                         </th>
                         <td>{{ project.address }}</td>
                         <td>{{ project.manager }}</td>

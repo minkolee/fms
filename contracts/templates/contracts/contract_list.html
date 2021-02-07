@@ -24,7 +24,7 @@
                 <tbody>
                 {% for contract in contracts %}
                     <tr>
-                        <th scope="row"><a href="{% url 'contracts:contract_detail' project.id contract.id %}">{{ contract.contract_id }}</a>
+                        <th scope="row"><a href="{{ contract.get_absolute_url }}">{{ contract.contract_id }}</a>
                         </th>
                         <td>{% if contract.contract_name|length > 5 %}
                             {{ contract.contract_name|slice:":6" }}...
@@ -35,7 +35,7 @@
                         <td>{{ contract.contract_type.name }}</td>
                         <td>{{ contract.contract_price|comma }}</td>
                         <td>{{ contract.contract_primary }}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a href="#">其他变动</a></td>
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a href="{{ contract.get_entry_add_url }}">添加其他变动</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

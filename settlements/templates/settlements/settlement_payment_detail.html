@@ -2,7 +2,8 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
-    <h2 class="text-center">{{ contract.contract_name }} 支付结算记录 - {{ settlement.name }}</h2>
+    <h2 class="text-center">支付结算记录详情</h2>
+    <caption>{{ contract.contract_name }} - {{ settlement.name }}</caption>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -12,7 +13,7 @@
         </thead>
         <tbody>
         <tr>
-            <td class="text-center ver" rowspan="4">应付结算款</td>
+            <td class="text-center " rowspan="4">应付结算款</td>
             <td>预付款项</td>
             <td>{{ settlement.payment_prepaid|comma }}</td>
         </tr>
@@ -30,7 +31,7 @@
         </tr>
 
         <tr>
-            <td class="text-center ver" rowspan="5">扣款项目</td>
+            <td class="text-center " rowspan="5">扣款项目</td>
             <td>预收款项</td>
             <td>{{ settlement.deduction_prepayment|comma }}</td>
         </tr>
@@ -57,7 +58,7 @@
         </tr>
 
         <tr>
-            <td class="text-center ver" rowspan="7">实际付款</td>
+            <td class="text-center " rowspan="7">实际付款</td>
             <td>预付款</td>
             <td>{{ settlement.payment_real_prepaid|comma }}</td>
         </tr>
