@@ -37,7 +37,10 @@
                         <td>{{ settlement.reception|comma }}</td>
                         <td>{{ settlement.not_received_yet|comma }}</td>
                         <td><a href="{% url 'settlements:settlement_detail' settlement.id %}">详情</a> | <a
-                                href="{% url 'settlements:settlement_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动</a></td>
+                                href="{% url 'settlements:settlement_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动</a>
+                        {% if not settlement.is_received %}
+                            <span class="badge badge-danger">检查变动</span>
+                         {% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

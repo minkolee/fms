@@ -31,12 +31,16 @@
                         <th scope="row">{{ forloop.counter }}
                         </th>
                         <td>{{ settlement.name }}</td>
-                        <td>{{ settlement.payment_total|comma }}</td>
+                        <td>{{ settlement.payment_total|comma }}
+                        </td>
                         <td>{{ settlement.deduction|comma }}</td>
                         <td>{{ settlement.total_paid|comma }}</td>
                         <td>{{ settlement.not_paid_yet|comma }}</td>
                         <td><a href="{% url 'settlements:settlement_payment_detail' settlement.id %}">详情</a> | <a
-                                href="{% url 'settlements:settlement_payment_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动</a>
+                                href="{% url 'settlements:settlement_payment_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动
+                         </a>{% if not settlement.is_paid %}
+                            <span class="badge badge-danger">检查变动</span>
+                         {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

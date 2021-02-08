@@ -89,6 +89,10 @@ class IncomeSettlement(models.Model):
         else:
             return 0
 
+    # 判断累计的收款金额是否等于变动中对应的净现金流
+    def is_received(self):
+        return self.reception() - (self.cal_total_cash_in() - self.cal_total_cash_out()) == 0
+
 
 class PaymentSettlement(models.Model):
     name = models.CharField(max_length=255, verbose_name="结算说明")
@@ -175,3 +179,7 @@ class PaymentSettlement(models.Model):
             return -result
         else:
             return 0
+
+    # 判断累计的付款金额是否等于本次实际支付
+    def is_paid(self):
+        return self.total_paid() - (self.cal_total_cash_out() - self.cal_total_cash_in()) == 0
