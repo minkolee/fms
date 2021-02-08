@@ -2,12 +2,22 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
-    <h1>{{ project.name }}</h1>
+    <h1 class="text-center">{{ project.name }}</h1>
+
     <p>{{ project.name }}位于{{ project.address }}，项目经理为{{ project.manager }}。</p>
     <p>项目目前{% if project.active %}正在进行中{% else %}已结束{% endif %}。{% if project.start_time %}项目开始时间为：
         {{ project.start_time|date:'Y年m月d日' }}。{% endif %}{% if project.complete_time %}项目竣工时间为：
         {{ project.complete_time|date:'Y年m月d日' }}。{% endif %}</p>
     <p>{{ project.text }}</p>
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基础信息</a>
+        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
+        <a href="{% url 'projects:project_edit_initial' project.id %}" type="button"
+           class="btn btn-primary">编辑初始数据</a>
+        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-info">项目合同</a>
+        <a href="{% url 'entry:project_entry_list' project.id %}" type="button" class="btn btn-info">项目变动</a>
+        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
+    </div>
     <h2 class="text-center">汇总数据</h2>
     <table class="table table-striped">
         <thead>
@@ -19,15 +29,15 @@
         <tbody>
         <tr>
             <td>已实现利润</td>
-            <td>{{ project.detail.profit|comma }}</td>
+            <td>{{ project.current_profit|comma }}</td>
         </tr>
         <tr>
             <td>净现金流</td>
-            <td>{{ project.detail.net_cash_flow|comma }}</td>
+            <td>{{ project.current_net_cash_flow|comma }}</td>
         </tr>
         <tr>
             <td>累计增值税</td>
-            <td>{{ project.detail.net_vat|comma }}</td>
+            <td>{{ project.current_net_vat|comma }}</td>
         </tr>
         <tr>
             <td>预算总收入</td>
@@ -46,7 +56,7 @@
             <td>{{ project.total_budget_net_profit|comma }}</td>
         </tr>
         <tr>
-            <td>净利润率：</td>
+            <td>预算净利润率：</td>
             <td>{{ project.net_profit_ratio|rate }}</td>
         </tr>
         </tbody>
@@ -67,65 +77,65 @@
                 <tbody>
                 <tr>
                     <td>累计确认收入</td>
-                    <td>{{ project.detail.accumulated_revenue|comma }}</td>
+                    <td>{{ project.total_revenue|comma }}</td>
                 </tr>
                 <tr>
                     <td>累计确认成本</td>
-                    <td>{{ project.detail.accumulated_cost|comma }}</td>
+                    <td>{{ project.total_cost|comma }}</td>
                 </tr>
                 <tr>
                     <td>合同履约成本</td>
-                    <td>{{ project.detail.capitalized_cost|comma }}</td>
+                    <td>{{ project.total_capitalized_cost|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>合同资产</td>
-                    <td>{{ project.detail.contract_asset|comma }}</td>
+                    <td>{{ project.total_contract_asset|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>合同负债</td>
-                    <td>{{ project.detail.contract_liability|comma }}</td>
+                    <td>{{ project.total_contract_liability|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>合同取得成本</td>
-                    <td>{{ project.detail.acquisition_cost|comma }}</td>
+                    <td>{{ project.total_acquisition_cost|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>累计收款</td>
-                    <td>{{ project.detail.accumulated_cash_in|comma }}</td>
+                    <td>{{ project.total_accumulated_cash_in|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>累计付款</td>
-                    <td>{{ project.detail.accumulated_cash_out|comma }}</td>
+                    <td>{{ project.total_accumulated_cash_out|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>应收账款</td>
-                    <td>{{ project.detail.accounts_receivable_balance|comma }}</td>
+                    <td>{{ project.total_accounts_receivable|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>应付账款</td>
-                    <td>{{ project.detail.accounts_payable_balance|comma }}</td>
+                    <td>{{ project.total_accounts_payable|comma }}</td>
                 </tr>
 
                 <tr>
-                    <td>预付分包款</td>
-                    <td>{{ project.detail.accounts_prepaid_balance|comma }}</td>
+                    <td>预付账款</td>
+                    <td>{{ project.total_accounts_prepaid|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>销项税金</td>
-                    <td>{{ project.detail.vat|comma }}</td>
+                    <td>{{ project.total_vat|comma }}</td>
                 </tr>
 
                 <tr>
                     <td>进项税金</td>
-                    <td>{{ project.detail.vat_input|comma }}</td>
+                    <td>{{ project.total_vat_input|comma }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -211,14 +221,7 @@
 
         {% endif %}
     </div>
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基础信息</a>
-        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
-        <a href="{% url 'projects:project_edit_initial' project.id %}" type="button"
-           class="btn btn-primary">编辑初始数据</a>
-        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-info">查看项目合同</a>
-        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除项目</a>
-    </div>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">

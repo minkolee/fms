@@ -6,18 +6,19 @@
         <p>{{ project.name }}还没有合同，请<a href="{% url 'contracts:contract_add' project.id %}">新增合同</a></p>
     {% else %}
         <h3 class="text-center mt-2">{{ project.name }}合同清单</h3>
-        <a href="{% url 'contracts:contract_add' project.id %}" class="btn btn-primary mt-2 mb-2">添加合同</a>
-        <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">返回项目详情</a>
-        <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">返回项目列表</a>
+        <a href="{% url 'contracts:contract_add' project.id %}" class="btn btn-primary mt-2 mb-2">新增合同</a>
+        <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">项目详情</a>
+        <a href="{% url 'entry:project_entry_list' project.id %}" class="btn btn-secondary mt-2 mb-2">项目变动</a>
+{#                <a href="{% url 'projects:project_list' %}" class="btn btn-secondary mt-2 mb-2">项目列表</a>#}
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
                 <tr>
                     <th scope="col">合同编号</th>
                     <th scope="col">合同名称</th>
-                    <th scope="col">合同类型</th>
                     <th scope="col">合同总价</th>
-                    <th scope="col">合同方</th>
+                    <th scope="col">累计收款</th>
+                    <th scope="col">累计付款</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -29,12 +30,18 @@
                         <td>
                             {{ contract.contract_name|wrap }}
                         </td>
-                        <td>{{ contract.contract_type.name }}</td>
-                        <td>{{ contract.contract_price|comma }}</td>
-                        <td>{{ contract.contract_primary|wrap }}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a
-                                href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a
-                                href="{{ contract.get_entry_add_url }}">添加其他变动</a></td>
+                        <td>{{ contract.contract_price|comma}}</td>
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a></td>
+                        <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a></td>
+                        <td><a href="{% url 'entry:contract_entry_list' contract.id %}">变动列表</a>
+                        {% if contract.is_net_cash_loss %}
+                            <span class="badge badge-danger">现金流</span>
+                        {% endif %}
+                        {% if contract.is_overpaid %}
+                            <span class="badge badge-danger">超付</span>
+                        {% endif %}
+
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

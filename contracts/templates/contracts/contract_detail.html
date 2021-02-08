@@ -2,7 +2,17 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
-    <h2>{{ project.name }} - {{ contract.contract_name }}基础信息</h2>
+    <h2 class="text-center">{{ project.name }} - {{ contract.contract_name }}基础信息</h2>
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary">编辑合同信息</a>
+        <a type="button" class="btn btn-primary" href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a>
+        <a type="button" class="btn btn-primary"
+           href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a>
+        <a type="button" class="btn btn-primary" href="{{ contract.get_entry_add_url }}">添加非结算变动</a>
+        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-info">合同列表</a>
+        <a href="{% url 'entry:contract_entry_list' contract.id %}" type="button" class="btn btn-info">变动列表</a>
+        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -44,26 +54,26 @@
             <td>{{ contract.contract_detail }}</td>
         </tr>
         <tr>
-            <td>供应商 </td>
-            <td>{{contract.contract_primary}}
-            {% if contract.contract_secondary1 %}
-                <br>
-            {{ contract.contract_secondary1 }}
-            {% endif %}
-            {% if contract.contract_secondary2 %}
-                <br>
-            {{ contract.contract_secondary2 }}
-            {% endif %}
-            {% if contract.contract_secondary3 %}
-                <br>
-            {{ contract.contract_secondary3 }}
-            {% endif %}
+            <td>供应商</td>
+            <td>{{ contract.contract_primary }}
+                {% if contract.contract_secondary1 %}
+                    <br>
+                    {{ contract.contract_secondary1 }}
+                {% endif %}
+                {% if contract.contract_secondary2 %}
+                    <br>
+                    {{ contract.contract_secondary2 }}
+                {% endif %}
+                {% if contract.contract_secondary3 %}
+                    <br>
+                    {{ contract.contract_secondary3 }}
+                {% endif %}
             </td>
         </tr>
         <tr>
             <td>联系人</td>
             <td>{% if contract.contract_contact %}
-            {{ contract.contract_contact }}
+                {{ contract.contract_contact }}
             {% endif %} </td>
         </tr>
         <tr>
@@ -89,21 +99,40 @@
                 <tbody>
                 <tr>
                     <td>合同总价</td>
-                    <td>{{contract.contract_price|comma}}</td>
+                    <td>{{ contract.contract_price|comma }}</td>
+                </tr>
+                <tr>
+                    <td>总收款</td>
+                    <td>{{ contract.cal_total_cash_in|comma }}</td>
+                </tr>
+                <tr>
+                    <td>总付款</td>
+                    <td>{{ contract.cal_total_cash_out|comma }}</td>
+                </tr>
+                <tr>
+                    <td>结算收款</td>
+                    <td>{{ contract.jiesuan_cal_total_cash_in|comma }}</td>
+                </tr>
+                    <tr>
+                    <td>结算付款</td>
+                    <td>{{contract.jiesuan_cal_total_cash_out|comma}}</td>
+                </tr>
+                <tr>
+                    <td>非结算收款</td>
+                    <td>{{contract.normal_cal_total_cash_in|comma}}</td>
                 </tr>
 
+                <tr>
+                    <td>非结算付款</td>
+                    <td>{{contract.normal_cal_total_cash_out|comma}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
 
 
     </div>
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary">编辑合同信息</a>
 
-        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-success">查看本项目合同</a>
-                <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该合同</a>
-    </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">

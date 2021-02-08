@@ -1,6 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
 from projects.models import Project
+from django.db.models import Sum
 
 
 # 合同类型
@@ -88,5 +89,56 @@ class Contract(models.Model):
         return reverse('contracts:contract_detail', args=[self.contract_project.id, self.id, ])
 
     # 以下为计算合同的所有相关变动影响的数值
+
+    # 计算合同总收款金额
     def cal_total_cash_in(self):
-        return self.contract_entries.all().filter(cash__gt=0)
+
+        result = self.contract_entries.all().filter(cash__gt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return result
+        else:
+            return 0
+
+    # 计算合同总付款金额
+    def cal_total_cash_out(self):
+
+        result = self.contract_entries.all().filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return -result
+        else:
+            return 0
+
+    # 计算是否超付
+    def is_overpaid(self):
+        return self.contract_price < self.cal_total_cash_out()
+
+    # 计算项目资金收支是否出现问题
+    def is_net_cash_loss(self):
+        return self.cal_total_cash_in() < self.cal_total_cash_out()
+
+    # 计算结算收款总额
+    def jiesuan_cal_total_cash_in(self):
+        settlements = self.settlements.all()
+        cash_sum = 0
+
+        for settlement in settlements:
+            cash_sum = cash_sum + settlement.cal_total_cash_in() - settlement.cal_total_cash_out()
+        return cash_sum
+
+    # 计算结算付款总额
+    def jiesuan_cal_total_cash_out(self):
+        settlements = self.settlements_payment.all()
+        cash_sum = 0
+        for settlement in settlements:
+            cash_sum = cash_sum + settlement.cal_total_cash_out() - settlement.cal_total_cash_in()
+        return cash_sum
+
+    # 非结算收款合计
+    def normal_cal_total_cash_in(self):
+        return self.cal_total_cash_in() - self.jiesuan_cal_total_cash_in()
+
+    # 非结算支付合计
+    def normal_cal_total_cash_out(self):
+        return self.cal_total_cash_out() - self.jiesuan_cal_total_cash_out()

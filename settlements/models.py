@@ -1,6 +1,7 @@
 from django.db import models
 from contracts.models import Contract
 from django.urls import reverse
+from django.db.models import Sum
 
 
 class IncomeSettlement(models.Model):
@@ -66,7 +67,27 @@ class IncomeSettlement(models.Model):
 
     def get_entry_add_url(self):
         return reverse('entry:entry_add_project') + "?p={}&c={}&si={}".format(self.contract.contract_project.id,
-                                                                                   self.contract.id, self.id)
+                                                                              self.contract.id, self.id)
+
+    # 计算结算对应的Entry的收款
+    def cal_total_cash_in(self):
+
+        result = self.income_entries.all().filter(cash__gt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return result
+        else:
+            return 0
+
+    # 计算结算对应的总付款金额
+    def cal_total_cash_out(self):
+
+        result = self.income_entries.all().filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return -result
+        else:
+            return 0
 
 
 class PaymentSettlement(models.Model):
@@ -133,4 +154,24 @@ class PaymentSettlement(models.Model):
 
     def get_entry_add_url(self):
         return reverse('entry:entry_add_project') + "?p={}&c={}&so={}".format(self.contract.contract_project.id,
-                                                                                   self.contract.id, self.id)
+                                                                              self.contract.id, self.id)
+
+    # 计算结算对应的Entry的收款
+    def cal_total_cash_in(self):
+
+        result = self.payment_entries.all().filter(cash__gt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return result
+        else:
+            return 0
+
+    # 计算结算对应的总付款金额
+    def cal_total_cash_out(self):
+
+        result = self.payment_entries.all().filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+
+        if result:
+            return -result
+        else:
+            return 0

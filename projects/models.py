@@ -23,6 +23,7 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('projects:project_detail', args=[self.id, ])
 
+    # 预算相关
     def has_budget(self):
         return self.budget.count() != 0
 
@@ -85,6 +86,134 @@ class Project(models.Model):
         verbose_name = '项目'
         verbose_name_plural = '项目'
 
+    # 所有的计算公式
+
+    # 累计确认收入
+    def total_revenue(self):
+        result = self.project_entries.aggregate(Sum('revenue'))['revenue__sum']
+        if result:
+            return result + self.detail.accumulated_revenue
+        return self.detail.accumulated_revenue
+
+    # 累计确认营业成本
+    def total_cost(self):
+        result = self.project_entries.aggregate(Sum('cost'))['cost__sum']
+        if result:
+            return result + self.detail.accumulated_cost
+        return self.detail.accumulated_cost
+
+    # 合同履约成本合计
+    def total_capitalized_cost(self):
+        result = self.project_entries.aggregate(Sum('capitalized_cost'))['capitalized_cost__sum']
+        if result:
+            return result + self.detail.capitalized_cost
+        return self.detail.capitalized_cost
+
+    # 合同资产合计
+    def total_contract_asset(self):
+        result = self.project_entries.aggregate(Sum('contract_asset'))['contract_asset__sum']
+        if result:
+            return result + self.detail.contract_asset
+        return self.detail.contract_asset
+
+    # 合同负债合计
+    def total_contract_liability(self):
+        result = self.project_entries.aggregate(Sum('contract_liability'))['contract_liability__sum']
+        if result:
+            return result + self.detail.contract_liability
+        return self.detail.contract_liability
+
+    # 合同取得成本合计
+    def total_acquisition_cost(self):
+        result = self.project_entries.aggregate(Sum('acquisition_cost'))['acquisition_cost__sum']
+        if result:
+            return result + self.detail.acquisition_cost
+        return self.detail.acquisition_cost
+
+    # 累计现金流收入
+    def total_accumulated_cash_in(self):
+        result = self.project_entries.filter(cash__gt=0).aggregate(Sum('cash'))['cash__sum']
+        if result:
+            return result + self.detail.accumulated_cash_in
+        return self.detail.accumulated_cash_in
+
+    # 累计现金流支出
+    def total_accumulated_cash_out(self):
+        result = self.project_entries.filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+        if result:
+            return -result + self.detail.accumulated_cash_out
+        return self.detail.accumulated_cash_out
+
+    # 应收账款余额
+    def total_accounts_receivable(self):
+        result = self.project_entries.aggregate(Sum('accounts_receivable'))['accounts_receivable__sum']
+        if result:
+            return result + self.detail.accounts_receivable_balance
+        return self.detail.accounts_receivable_balance
+
+    # 应付账款余额
+    def total_accounts_payable(self):
+        result = self.project_entries.aggregate(Sum('accounts_payable'))['accounts_payable__sum']
+        if result:
+            return result + self.detail.accounts_payable_balance
+        return self.detail.accounts_payable_balance
+
+    # 预付账款余额
+    def total_accounts_prepaid(self):
+        result = self.project_entries.aggregate(Sum('accounts_prepaid'))['accounts_prepaid__sum']
+        if result:
+            return result + self.detail.accounts_prepaid_balance
+        return self.detail.accounts_prepaid_balance
+
+    # 销项税金累计
+    def total_vat(self):
+        result = self.project_entries.aggregate(Sum('vat'))['vat__sum']
+        if result:
+            return result + self.detail.vat
+        return self.detail.vat
+
+    # 进项税金累计
+    def total_vat_input(self):
+        result = self.project_entries.aggregate(Sum('vat_input'))['vat_input__sum']
+        if result:
+            return result + self.detail.vat_input
+        return self.detail.vat_input
+
+    # 以下是根据实际情况计算的结果
+
+    # 净现金流
+    def current_net_cash_flow(self):
+        return self.total_accumulated_cash_in() - self.total_accumulated_cash_out()
+
+    # 当前利润
+    def current_profit(self):
+        return self.total_revenue() - self.total_cost()
+
+    # 累计增值税
+    def current_net_vat(self):
+        return self.total_vat() - self.total_vat_input()
+
+
+class ProjectBudget(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')
+    cost_type = models.CharField(max_length=255, verbose_name="名称")
+    target_revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标收入', default=0)
+    target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
+    target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
+    target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
+    description = models.TextField(verbose_name="变更说明", blank=True, null=True)
+    change_time = models.DateTimeField(null=True, verbose_name='变更时间', blank=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
+    updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+
+    def __str__(self):
+        return self.cost_type
+
+    class Meta:
+        ordering = ['created', ]
+        verbose_name = '项目预算'
+        verbose_name_plural = '项目预算'
+
 
 # 项目财务情况
 class ProjectFinanceInitialDetail(models.Model):
@@ -134,24 +263,3 @@ class ProjectFinanceInitialDetail(models.Model):
         return self.accumulated_revenue + self.accumulated_cost + self.capitalized_cost + self.contract_asset + \
                self.contract_liability + self.acquisition_cost + self.accumulated_cash_in + self.accumulated_cash_out \
                + self.accounts_payable_balance + self.accounts_receivable_balance + self.vat_input + self.vat
-
-
-class ProjectBudget(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')
-    cost_type = models.CharField(max_length=255, verbose_name="名称")
-    target_revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标收入', default=0)
-    target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
-    target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
-    target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
-    description = models.TextField(verbose_name="变更说明", blank=True, null=True)
-    change_time = models.DateTimeField(null=True, verbose_name='变更时间', blank=True)
-    created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
-    updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
-
-    def __str__(self):
-        return self.cost_type
-
-    class Meta:
-        ordering = ['created', ]
-        verbose_name = '项目预算'
-        verbose_name_plural = '项目预算'

@@ -14,9 +14,8 @@
 <body>
 {{ contract.id }}{{ contract.name }}
 {{ contract.cal_total_cash_in }}
-{% for cc in contract.cal_total_cash_in %}
-<p>{{ cc }}：{{ cc.cash }}</p>
-{% endfor %}
+{{ contract.cal_total_cash_out }}
+
 
 <script src="{% static 'js/jquery.slim.min.js' %}"
         crossorigin="anonymous"></script>

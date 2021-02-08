@@ -3,21 +3,20 @@
 {% block content %}
     {% include 'base/message.html' %}
     {% if quantity == 0 %}
-        <p>{{ project.name }}还没有变动记录，请<a href="{{ project.get_entry_add_url }}">新增记录</a></p>
+        <p>{{ contract.contract_name }}还没有变动记录，请<a href="{% url 'contracts:contract_detail' project.id contract.id %}">返回详情页面。</a></p>
     {% else %}
-        <h3 class="text-center mt-2">{{ project.name }}变动记录清单</h3>
-        <a href="{{ project.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2">新增非合同变动</a>
-        <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-secondary mt-2 mb-2">项目详情</a>
+        <h3 class="text-center mt-2">{{ contract.contract_name }}变动记录清单</h3>
+        <a href="{{ contract.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2">新增非结算变动</a>
+        <a href="{% url 'contracts:contract_detail'  project.id contract.id %}" class="btn btn-secondary mt-2 mb-2">合同详情</a>
         <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-secondary mt-2 mb-2">合同列表</a>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">所属合同</th>
                     <th scope="col">所属结算</th>
                     <th scope="col">收款金额</th>
-                    <th scope="col">付款金额</th>
+                    <th scope="col">支付金额</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -25,8 +24,6 @@
                 {% for entry in entries %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{% if entry.contract %}<a href="{{ entry.contract.get_absolute_url }}">
-                            {{ entry.contract.contract_name|wrap }}{% endif %}</a></td>
                         <td>{% if entry.income_settlement %}
                             <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name|wrap }}</a>{% endif %}
                             {% if entry.payment_settlement %}

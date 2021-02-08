@@ -3,6 +3,16 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h2 class="text-center">{{ entry.project.name }} 变动记录详情</h2>
+
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'entry:entry_edit' entry.id %}" type="button" class="btn btn-primary">编辑变动记录</a>
+        <a href="{% url 'entry:project_entry_list' entry.project.id %}" type="button" class="btn btn-secondary">项目变动列表</a>
+        {% if entry.contract %}
+        <a href="{% url 'entry:contract_entry_list' entry.contract.id %}" type="button" class="btn btn-secondary">合同变动列表</a>
+        {% endif %}
+        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
+    </div>
+
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
@@ -121,11 +131,7 @@
     </table>
 
 
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'entry:entry_edit' entry.id %}" type="button" class="btn btn-primary">编辑变动记录</a>
-        <a href="{% url 'entry:project_entry_list' entry.project.id %}" type="button" class="btn btn-secondary">返回变动列表</a>
-        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
-    </div>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">

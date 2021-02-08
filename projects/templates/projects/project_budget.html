@@ -4,6 +4,10 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h3 class="text-center mt-2">{{ project.name }}预算</h3>
+    <p>
+        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button">新增预算条目</a>
+        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-secondary">项目详情</a>
+    </p>
     {% if quantity == 0 %}
         <p>无任何预算条目。</p>
     {% else %}
@@ -61,10 +65,7 @@
         </table>
     {% endif %}
 
-    <p>
-        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button">添加预算条目</a>
-        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-secondary">返回项目详情</a>
-    </p>
+
 
 
 {% endblock %}

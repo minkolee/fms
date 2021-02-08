@@ -16,6 +16,18 @@ def entry_list_project(request, project_id):
                   {'project': project, 'entries': entries, 'quantity': quantity})
 
 
+# 列出一个合同对应的所有变动
+def entry_list_contract(request, contract_id):
+    contract = get_object_or_404(Contract, id=contract_id)
+    project = contract.contract_project
+    entries = contract.contract_entries.all()
+    quantity = entries.count()
+    return render(request, 'entry/entry_list_contract.html',
+                  {'project': project, 'entries': entries, 'quantity': quantity,'contract':contract})
+
+
+
+
 # 仅仅添加只对应项目的变动
 def entry_add(request):
     # GET直接返回空白表单，通过URL取参数判断内容。把几个对应的id埋到页面中。

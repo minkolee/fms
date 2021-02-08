@@ -3,7 +3,12 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h2 class="text-center">支付结算记录详情</h2>
-    <caption>{{ contract.contract_name }} - {{ settlement.name }}</caption>
+    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
+        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
+        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
+    </div>
+    <div><small>{{ contract.contract_name }} - {{ settlement.name }}</small></div>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -93,11 +98,7 @@
         </tbody>
     </table>
 
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
-        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
-        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
-    </div>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -110,8 +111,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {% if user.is_superuser %}将删除该结算记录
-                        相关的所有数据，删除之后不可恢复！{% else %}删除结算记录请联系管理员。{% endif %}
+                    {% if user.is_superuser %}将删除该结算记录相关的所有数据，删除之后不可恢复！{% else %}删除结算记录请联系管理员。{% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>

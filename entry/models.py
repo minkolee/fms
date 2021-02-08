@@ -67,9 +67,20 @@ class Entry(models.Model):
         return self.project.name + "变动记录"
 
     class Meta:
-        ordering = ['created', ]
+        ordering = ['-created', ]
         verbose_name = '变动记录'
         verbose_name_plural = '变动记录'
 
     def get_absolute_url(self):
         return reverse('entry:entry_detail', args=[self.id, ])
+
+    # 经过正负转换的Entry的金额
+    def received_money(self):
+        if self.cash >=0:
+            return self.cash
+        return 0
+
+    def paid_money(self):
+        if self.cash <=0:
+            return -self.cash
+        return 0
