@@ -62,13 +62,16 @@ class Project(models.Model):
             return 0
 
     def gross_profit_ratio(self):
+        if self.total_budget_income() == 0:
+            return None
         if self.has_budget():
-
             return self.total_budget_gross_profit() / self.total_budget_income()
         else:
             return 0
 
     def net_profit_ratio(self):
+        if self.total_budget_income() == 0:
+            return None
         if self.has_budget():
             return self.total_budget_net_profit() / self.total_budget_income()
         else:

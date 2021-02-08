@@ -26,16 +26,15 @@
                     <tr>
                         <th scope="row"><a href="{{ contract.get_absolute_url }}">{{ contract.contract_id }}</a>
                         </th>
-                        <td>{% if contract.contract_name|length > 5 %}
-                            {{ contract.contract_name|slice:":6" }}...
-                            {% else %}
-                            {{ contract.contract_name}}
-                            {% endif %}
-                            </td>
+                        <td>
+                            {{ contract.contract_name|wrap }}
+                        </td>
                         <td>{{ contract.contract_type.name }}</td>
                         <td>{{ contract.contract_price|comma }}</td>
-                        <td>{{ contract.contract_primary }}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a href="{{ contract.get_entry_add_url }}">添加其他变动</a></td>
+                        <td>{{ contract.contract_primary|wrap }}</td>
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a> | <a
+                                href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a> | <a
+                                href="{{ contract.get_entry_add_url }}">添加其他变动</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

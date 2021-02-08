@@ -4,6 +4,8 @@ from .models import About
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from contracts.models import Contract
+
 
 def index(request):
     return render(request, 'homepage/index.html')
@@ -35,3 +37,12 @@ def about(request):
 @login_required(login_url='/login/?next=home')
 def home(request):
     return render(request, 'homepage/dashboard.html')
+
+
+
+
+# 测试简单页面所用
+def test(request):
+    contract = Contract.objects.all()[0]
+
+    return render(request, 'base/test.html', {'contract': contract})

@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" crossorigin="anonymous">
+
+    <style>{% block style %}{% endblock %}</style>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+{{ contract.id }}{{ contract.name }}
+{{ contract.cal_total_cash_in }}
+{% for cc in contract.cal_total_cash_in %}
+<p>{{ cc }}：{{ cc.cash }}</p>
+{% endfor %}
+
+<script src="{% static 'js/jquery.slim.min.js' %}"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"
+        crossorigin="anonymous"></script>
+<script>{% block jscode %}{% endblock %}</script>
+</body>
+</html>

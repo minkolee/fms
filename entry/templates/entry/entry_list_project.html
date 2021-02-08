@@ -26,11 +26,11 @@
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{% if entry.contract %}<a href="{{ entry.contract.get_absolute_url }}">
-                            {{ entry.contract.contract_name|slice:"10" }}...{% endif %}</a></td>
+                            {{ entry.contract.contract_name|wrap }}{% endif %}</a></td>
                         <td>{% if entry.income_settlement %}
-                            <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name }}</a>{% endif %}
+                            <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name|wrap }}</a>{% endif %}
                             {% if entry.payment_settlement %}
-                                <a href="{{ entry.payment_settlement.get_absolute_url }}">{{ entry.payment_settlement.name }}</a>{% endif %}
+                                <a href="{{ entry.payment_settlement.get_absolute_url }}">{{ entry.payment_settlement.name|wrap }}</a>{% endif %}
                         </td>
                         <td>{{ entry.total_debit_side|comma }}</td>
                         <td>{{ entry.total_credit_side|comma }}</td>

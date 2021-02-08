@@ -86,3 +86,7 @@ class Contract(models.Model):
 
     def get_absolute_url(self):
         return reverse('contracts:contract_detail', args=[self.contract_project.id, self.id, ])
+
+    # 以下为计算合同的所有相关变动影响的数值
+    def cal_total_cash_in(self):
+        return self.contract_entries.all().filter(cash__gt=0)

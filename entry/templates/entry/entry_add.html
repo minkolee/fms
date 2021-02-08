@@ -1,0 +1,43 @@
+{% extends 'base/fix-nav.html' %}
+
+{% block content %}
+    <h3 class="text-center">新增 {{ project.name }}{% if contract %}-{{ contract.contract_name }}
+    {% endif %}的 变动记录</h3>
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-1"></div>
+        <div class="col-md">
+            {% include 'base/danger-message.html' %}
+
+            <form action="{% url 'entry:entry_add_project' %}" method="post">
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+
+                {#hide info部分#}
+                <input type="hidden" value="{{ project_id }}" name="project_id">
+                <input type="hidden" value="{{ contract_id }}" name="contract_id">
+                <input type="hidden" value="{{ settlement_income_id }}" name="settlement_income_id">
+                <input type="hidden" value="{{ settlement_payment_id }}" name="settlement_payment_id">
+
+                <button class="btn btn-primary" type="submit">提交</button>
+                <a href="{% url 'entry:project_entry_list' project.id %}" class="btn btn-secondary">返回</a>
+            </form>
+        </div>
+        <div class="col-md-3 col-sm-1"></div>
+    </div>
+
+
+{% endblock %}
+
+{% block jscode %}
+    $(':text').addClass('form-control');
+    $('textarea').addClass('form-control');
+    $('#id_active').addClass('form-check-input');
+    $('.form-check label').addClass('form-check-label');
+    $('input').addClass('form-control');
+{% endblock %}

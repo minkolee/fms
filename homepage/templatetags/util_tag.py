@@ -26,3 +26,13 @@ def replace_return_with_br(str_obj):
 @register.filter(name='record')
 def record(str_obj):
     return str_obj.zfill(4)
+
+
+@register.filter(name='wrap')
+def wrap(str_obj):
+    if not str_obj:
+        return None
+    if len(str_obj) <= 10:
+        return str_obj
+    else:
+        return str_obj[:8]+'...'

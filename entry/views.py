@@ -90,7 +90,7 @@ def entry_add(request):
                               {'project_id': project_id, 'contract_id': contract_id,
                                'settlement_income_id': settlement_income_id,
                                'settlement_payment_id': settlement_payment_id,
-                               'form': form})
+                               'form': form, 'project': project})
             else:
                 current_entry.project = project
                 current_entry.contract = contract
@@ -105,7 +105,7 @@ def entry_add(request):
                       {'project_id': project_id, 'contract_id': contract_id,
                        'settlement_income_id': settlement_income_id,
                        'settlement_payment_id': settlement_payment_id,
-                       'form': form})
+                       'form': form, 'project': project})
 
 
 # 编辑
