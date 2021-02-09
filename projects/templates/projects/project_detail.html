@@ -9,7 +9,7 @@
         {{ project.start_time|date:'Y年m月d日' }}。{% endif %}{% if project.complete_time %}项目竣工时间为：
         {{ project.complete_time|date:'Y年m月d日' }}。{% endif %}</p>
     <p>{{ project.text }}</p>
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
+    <div class="btn-group mb-2 d-print-none" role="group" aria-label="Basic example">
         <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基础信息</a>
         <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
         <a href="{% url 'projects:project_edit_initial' project.id %}" type="button"

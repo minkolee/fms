@@ -3,10 +3,10 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h2 class="text-center">支付结算记录详情</h2>
-    <div class="btn-group mb-2" role="group" aria-label="Basic example">
-        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑结算信息</a>
-        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">返回结算列表</a>
-        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除该结算记录</a>
+    <div class="btn-group mb-2 d-print-none" role="group" aria-label="Basic example">
+        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑</a>
+        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">结算列表</a>
+        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
     </div>
     <div><small>{{ contract.contract_name }} - {{ settlement.name }}</small></div>
     <table class="table table-bordered">

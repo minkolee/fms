@@ -16,6 +16,7 @@
                     <th scope="col">#</th>
                     <th scope="col">所属合同</th>
                     <th scope="col">所属结算</th>
+                    <th scope="col">说明</th>
                     <th scope="col">收款金额</th>
                     <th scope="col">付款金额</th>
                     <th scope="col">操作</th>
@@ -32,6 +33,7 @@
                             {% if entry.payment_settlement %}
                                 <a href="{{ entry.payment_settlement.get_absolute_url }}">{{ entry.payment_settlement.name|wrap }}</a>{% endif %}
                         </td>
+                        <td>{{ entry.description }}</td>
                         <td>{{ entry.received_money|comma }}</td>
                         <td>{{ entry.paid_money|comma }}</td>
                         <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a></td>

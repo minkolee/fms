@@ -56,76 +56,76 @@
         <tr>
             <td class="text-center" rowspan="3">损益</td>
             <td>营业收入</td>
-            <td>{{ entry.revenue }}</td>
+            <td>{{ entry.revenue|comma }}</td>
         </tr>
         <tr>
             <td>营业成本</td>
-            <td>{{ entry.cost }}</td>
+            <td>{{ entry.cost|comma }}</td>
         </tr>
         <tr>
             <td>其他损益</td>
-            <td>{{ entry.others_profit_loss }}</td>
+            <td>{{ entry.others_profit_loss|comma }}</td>
         </tr>
         <tr>
             <td class="text-center" rowspan="8">资产类</td>
             <td>货币资金</td>
-            <td>{{ entry.cash }}</td>
+            <td>{{ entry.cash|comma }}</td>
         </tr>
         <tr>
             <td>合同履约成本</td>
-            <td>{{ entry.capitalized_cost }}</td>
+            <td>{{ entry.capitalized_cost|comma }}</td>
         </tr>
 
         <tr>
             <td>合同资产</td>
-            <td>{{ entry.contract_asset }}</td>
+            <td>{{ entry.contract_asset|comma }}</td>
         </tr>
 
         <tr>
             <td>合同取得成本</td>
-            <td>{{ entry.acquisition_cost }}</td>
+            <td>{{ entry.acquisition_cost|comma }}</td>
         </tr>
 
         <tr>
             <td>应收账款</td>
-            <td>{{ entry.accounts_receivable }}</td>
+            <td>{{ entry.accounts_receivable|comma }}</td>
         </tr>
 
         <tr>
             <td>预付账款</td>
-            <td>{{ entry.accounts_prepaid }}</td>
+            <td>{{ entry.accounts_prepaid|comma }}</td>
         </tr>
 
         <tr>
             <td>进项税金</td>
-            <td>{{ entry.vat_input }}</td>
+            <td>{{ entry.vat_input|comma }}</td>
         </tr>
 
             <tr>
             <td>其他资产</td>
-            <td>{{ entry.others_asset }}</td>
+            <td>{{ entry.others_asset|comma }}</td>
         </tr>
 
         <tr>
             <td class="text-center" rowspan="4">负债类</td>
             <td>合同负债</td>
-            <td>{{entry.contract_liability}}</td>
+            <td>{{entry.contract_liability|comma}}</td>
         </tr>
 
         <tr>
             <td>应付账款</td>
-            <td>{{ entry.accounts_payable }}</td>
+            <td>{{ entry.accounts_payable|comma }}</td>
         </tr>
 
 
         <tr>
             <td>销项税金</td>
-            <td>{{entry.vat}}</td>
+            <td>{{entry.vat|comma}}</td>
         </tr>
 
             <tr>
             <td>其他负债</td>
-            <td>{{entry.others_liability}}</td>
+            <td>{{entry.others_liability|comma}}</td>
         </tr>
 
     </table>
