@@ -31,16 +31,13 @@
                             {{ contract.contract_name|wrap }}
                         </td>
                         <td>{{ contract.contract_price|comma}}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a></td>
-                        <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a></td>
-                        <td><a href="{% url 'entry:contract_entry_list' contract.id %}">变动</a>
-                        {% if contract.is_net_cash_loss %}
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a>{% if contract.is_net_cash_loss %}
                             <span class="badge badge-danger">现金流</span>
-                        {% endif %}
-                        {% if contract.is_overpaid %}
+                        {% endif %}</td>
+                        <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a>{% if contract.is_overpaid %}
                             <span class="badge badge-danger">超付</span>
-                        {% endif %}
-
+                        {% endif %}</td>
+                        <td><a href="{% url 'entry:contract_entry_list' contract.id %}">变动</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -1,0 +1,42 @@
+{% extends 'base/fix-nav.html' %}
+
+{% block content %}
+    <h3 class="text-center">新增{{ entry.contract.contract_project.name }} {{ entry.description }} 增值税票信息</h3>
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-1"></div>
+        <div class="col-md">
+            <form action="{% url 'vat:vat_edit' invoice.id %}" method="post">
+                {% for field in form %}
+                    {% if forloop.counter == 5 %}
+                        <div class="form-group form-check">
+                            {{ field.errors }}
+                            {{ field }}
+                            {{ field.label_tag }}
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">提交</button>
+                <a href="{% url 'vat:vat_list_by_entry' entry.id %}" class="btn btn-secondary">返回</a>
+            </form>
+        </div>
+        <div class="col-md-3 col-sm-1"></div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block jscode %}
+    $('input').addClass('form-control');
+    $('select').addClass('form-control');
+    $('#id_send').addClass('form-check-input');
+    $('#id_send').removeClass('form-control');
+
+{% endblock %}

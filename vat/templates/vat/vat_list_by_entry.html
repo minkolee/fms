@@ -1,0 +1,75 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+{% block content %}
+    {% include 'base/message.html' %}
+    {% if quantity == 0 %}
+        <p>本次结算还没有增值税发票信息，请<a href="{% url 'vat:vat_add_by_entry' entry.id %}">新增增值税发票信息</a></p>
+    {% else %}
+        <h3 class="text-center mt-2">增值税发票信息</h3>
+        <a href="{% url 'vat:vat_add_by_entry' entry.id %}" class="btn btn-primary mt-2 mb-2">新增增值税发票</a>
+        <a href="{% url 'entry:entry_detail' entry.id %}" class="btn btn-secondary mt-2 mb-2">对应变动详情</a>
+        <a href="{% url 'entry:contract_entry_list' contract.id %}" class="btn btn-secondary mt-2 mb-2">所属合同变动</a>
+        <p><small>{{ contract.contract_project.name }} - {{ contract.contract_id }} {{ contract.contract_name }}
+            - {{ entry.description }} </small></p>
+        <div class="table-responsive-lg">
+            <table class="table table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">发票类型</th>
+                    <th scope="col">发票编号</th>
+                    <th scope="col">不含税额</th>
+                    <th scope="col">税额</th>
+                    <th scope="col">含税总额</th>
+                    <th scope="col">已提交/收到</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for invoice in invoices %}
+                    <tr>
+                        <th>{{ forloop.counter }}</th>
+                        <td>{{ invoice.vat_type_str }}</td>
+                        <td>{{ invoice.invoice_number }}</td>
+                        <td>{{ invoice.price_without_vat|comma }}</td>
+                        <td>{{ invoice.vat|comma }}</td>
+                        <td>{{ invoice.price_with_vat|comma }}</td>
+                        <td>
+                            {% if invoice.send %}
+                                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                            {% endif %}
+                        </td>
+                        <td>{% if invoice.send %}
+                            <a href="{% url 'vat:vat_change_status' invoice.id %}" class="text-danger"><i class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
+                        {% else %}
+                            <a href="{% url 'vat:vat_change_status' invoice.id %}" class="text-primary"><i class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
+                        {% endif %}
+                            <a title="编辑" href="{% url 'vat:vat_edit' invoice.id %}" class="text-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;
+                            <a title="删除" id="delete" href="{% url 'vat:vat_delete' invoice.id %}" class="text-danger todelete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block jscode %}
+{#<script>#}
+        function test(e) {
+            if (!confirm('删除后不可恢复，确认吗？')){
+                e.preventDefault()
+            }
+        }
+
+        let as = document.getElementsByClassName('todelete')
+        let i =0;
+        for (; i < as.length; i++) {
+            as[i].addEventListener('click',test)
+        }
+
+{#</script>#}
+{% endblock %}

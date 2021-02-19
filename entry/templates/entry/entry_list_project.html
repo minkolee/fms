@@ -36,7 +36,7 @@
                         <td>{{ entry.description }}</td>
                         <td>{{ entry.received_money|comma }}</td>
                         <td>{{ entry.paid_money|comma }}</td>
-                        <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a></td>
+                        <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a> | <a href="{% url 'vat:vat_list_by_entry' entry.id %}">增值税</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

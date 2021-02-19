@@ -10,6 +10,7 @@
         {% if entry.contract %}
         <a href="{% url 'entry:contract_entry_list' entry.contract.id %}" type="button" class="btn btn-secondary">合同变动列表</a>
         {% endif %}
+        <a href="{% url 'vat:vat_list_by_entry' entry.id %}" type="button" class="btn btn-secondary">增值税信息</a>
         <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
     </div>
 
