@@ -23,9 +23,7 @@ def entry_list_contract(request, contract_id):
     entries = contract.contract_entries.all()
     quantity = entries.count()
     return render(request, 'entry/entry_list_contract.html',
-                  {'project': project, 'entries': entries, 'quantity': quantity,'contract':contract})
-
-
+                  {'project': project, 'entries': entries, 'quantity': quantity, 'contract': contract})
 
 
 # 仅仅添加只对应项目的变动
@@ -110,6 +108,10 @@ def entry_add(request):
                 current_entry.payment_settlement = settlement_payment
                 current_entry.save()
                 messages.success(request, '成功添加变动记录')
+
+                # 根据是否包含合同，来判断转向合同对应变动还是项目对应变动
+                if contract_id != 0:
+                    return redirect(reverse('entry:contract_entry_list', args=[contract_id, ]))
 
                 return redirect(reverse('entry:project_entry_list', args=[project_id, ]))
 

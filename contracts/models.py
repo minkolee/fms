@@ -43,7 +43,9 @@ class Contract(models.Model):
     contract_name = models.CharField(max_length=255, verbose_name='合同名称')
     # 合同类型 - 修改成即使重新初始化，会将外键设置为null
     contract_type = models.ForeignKey(ContractType, related_name='contract_type', verbose_name='合同类型',
-                                      on_delete=models.SET_NULL, null=True, blank=True)
+                                      on_delete=models.CASCADE,
+                                      # null=True, blank=True
+                                      )
     # 合同对应的项目
     contract_project = models.ForeignKey(Project, related_name='contracts', verbose_name='项目名称',
                                          on_delete=models.CASCADE)
@@ -55,7 +57,9 @@ class Contract(models.Model):
     contract_end_date = models.DateTimeField(null=True, verbose_name='结束日期', blank=True)
     # 合同类别（用于印花税）- 修改成即使重新初始化，会将外键设置为null
     contract_stamp_type = models.ForeignKey(Stamp, related_name='stamp', verbose_name="合同类别",
-                                            on_delete=models.SET_NULL, null=True, blank=True)
+                                            on_delete=models.CASCADE,
+                                            # null=True, blank=True
+                                            )
     # 合同标的
     contract_detail = models.CharField(max_length=255, verbose_name='合同标的')
     # 主要合同对手
@@ -114,9 +118,9 @@ class Contract(models.Model):
     def is_overpaid(self):
         return self.contract_price < self.cal_total_cash_out()
 
-    # 计算项目资金收支是否出现问题
+    # 计算合同资金收支是否出现问题, 成本合同不会考虑资金收支，仅考虑超付
     def is_net_cash_loss(self):
-        return self.cal_total_cash_in() < self.cal_total_cash_out()
+        return (self.cal_total_cash_in() < self.cal_total_cash_out()) & (self.contract_type.id != 2)
 
     # 计算结算收款总额
     def jiesuan_cal_total_cash_in(self):

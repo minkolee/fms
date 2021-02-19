@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'contracts.apps.ContractsConfig',
     'settlements.apps.SettlementsConfig',
     'entry.apps.EntryConfig',
+    'vat.apps.VatConfig',
 ]
 
 MIDDLEWARE = [

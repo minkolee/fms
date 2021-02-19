@@ -64,7 +64,7 @@ class Entry(models.Model):
         return self.total_debit_side() - self.total_credit_side() == 0
 
     def __str__(self):
-        return self.project.name + "变动记录"
+        return '{} | {:,} | {:,} '.format(self.project.name, self.total_debit_side(), self.total_credit_side())
 
     class Meta:
         ordering = ['-created', ]
@@ -76,11 +76,11 @@ class Entry(models.Model):
 
     # 经过正负转换的Entry的金额
     def received_money(self):
-        if self.cash >=0:
+        if self.cash >= 0:
             return self.cash
         return 0
 
     def paid_money(self):
-        if self.cash <=0:
+        if self.cash <= 0:
             return -self.cash
         return 0

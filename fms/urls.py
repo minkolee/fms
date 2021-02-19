@@ -22,8 +22,9 @@ urlpatterns = [
     path('settlement/', include('settlements.urls')),
     path('project/', include('projects.urls')),
     path('contract/', include('contracts.urls')),
-    path('admin/', admin.site.urls),
+    path('vat/', include('vat.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('homepage.urls')),
+    path('admin/', admin.site.urls),
 ]
