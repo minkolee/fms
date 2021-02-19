@@ -5,9 +5,9 @@
     <h2 class="text-center">{{ project.name }} - {{ contract.contract_name }}基础信息</h2>
     <div class="btn-group mb-2 d-print-none" role="group" aria-label="Basic example">
         <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary">编辑合同信息</a>
-        <a type="button" class="btn btn-primary" href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a>
-        <a type="button" class="btn btn-primary"
-           href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a>
+{#        <a type="button" class="btn btn-primary" href="{% url 'settlements:settlement_list' contract.id %}">收款结算</a>#}
+{#        <a type="button" class="btn btn-primary"#}
+{#           href="{% url 'settlements:settlement_payment_list' contract.id %}">付款结算</a>#}
         <a type="button" class="btn btn-primary" href="{{ contract.get_entry_add_url }}">添加非结算变动</a>
         <a href="{% url 'settlements:settlement_list' contract.id %}" type="button" class="btn btn-info">收款结算列表</a>
         <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-info">付款结算列表</a>
