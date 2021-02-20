@@ -3,9 +3,11 @@ from entry.models import Entry
 from .forms import VatInvoiceForm
 from .models import VatInvoice
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 # 按照变动记录列出增票信息
+@login_required
 def list_by_entry(request, entry_id):
     entry = get_object_or_404(Entry, id=entry_id)
 
@@ -26,7 +28,7 @@ def list_by_entry(request, entry_id):
 
 
 # 新增增值税发票信息
-
+@login_required
 def add_by_entry(request, entry_id):
     entry = get_object_or_404(Entry, id=entry_id)
 
@@ -50,6 +52,7 @@ def add_by_entry(request, entry_id):
 
 
 # 更改增值税发票提交和取消的状态
+@login_required
 def change_send_status(request, vat_id):
     invoice = get_object_or_404(VatInvoice, id=vat_id)
     invoice.send = not invoice.send
@@ -58,6 +61,7 @@ def change_send_status(request, vat_id):
 
 
 # 编辑增票信息
+@login_required
 def edit_vat(request, vat_id):
     invoice = get_object_or_404(VatInvoice, id=vat_id)
     entry = invoice.entry
@@ -81,6 +85,7 @@ def edit_vat(request, vat_id):
 
 
 # 删除增票信息
+@login_required
 def delete_invoice(request, vat_id):
     invoice = get_object_or_404(VatInvoice, id=vat_id)
     messages.success(request, '成功删除增值税发票信息')

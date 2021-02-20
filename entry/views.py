@@ -5,9 +5,11 @@ from contracts.models import Contract
 from .models import Entry
 from settlements.models import IncomeSettlement, PaymentSettlement
 from .forms import EntryForm
+from django.contrib.auth.decorators import login_required
 
 
 # 列出一个项目的所有变动
+@login_required
 def entry_list_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     entries = project.project_entries.all()
@@ -17,6 +19,7 @@ def entry_list_project(request, project_id):
 
 
 # 列出一个合同对应的所有变动
+@login_required
 def entry_list_contract(request, contract_id):
     contract = get_object_or_404(Contract, id=contract_id)
     project = contract.contract_project
@@ -27,6 +30,7 @@ def entry_list_contract(request, contract_id):
 
 
 # 仅仅添加只对应项目的变动
+@login_required
 def entry_add(request):
     # GET直接返回空白表单，通过URL取参数判断内容。把几个对应的id埋到页面中。
     if request.method == "GET":
@@ -123,6 +127,7 @@ def entry_add(request):
 
 
 # 编辑
+@login_required
 def entry_edit(request, entry_id):
     if request.method == "GET":
         entry = get_object_or_404(Entry, id=entry_id)
@@ -209,6 +214,7 @@ def entry_edit(request, entry_id):
                        'form': form, 'project': project, 'entry_id': entry_id, 'entry': entry})
 
 
+@login_required
 def entry_delete(request, entry_id):
     if request.method == "POST":
         entry = get_object_or_404(Entry, id=entry_id)
@@ -218,6 +224,7 @@ def entry_delete(request, entry_id):
         return redirect(reverse('entry:project_entry_list', args=[project_id, ]))
 
 
+@login_required
 def entry_detail(request, entry_id):
     entry = get_object_or_404(Entry, id=entry_id)
 

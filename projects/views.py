@@ -2,20 +2,24 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from .models import Project, ProjectFinanceInitialDetail, ProjectBudget
 from .forms import ProjectForm, ProjectInitialDetailForm, ProjectBudgetForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def project_list(request):
     projects = Project.objects.all()
     quantity = Project.objects.count()
     return render(request, 'projects/project_list.html', {'projects': projects, 'quantity': quantity})
 
 
+@login_required
 def project_detail(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
     return render(request, 'projects/project_detail.html', {'project': project})
 
 
+@login_required
 def project_add(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -34,6 +38,7 @@ def project_add(request):
     return render(request, 'projects/project_add.html', {'form': form})
 
 
+@login_required
 def edit_project(request, project_id):
     if request.method == 'POST':
         project = get_object_or_404(Project, id=project_id)
@@ -52,6 +57,7 @@ def edit_project(request, project_id):
         return render(request, 'projects/project_edit.html', {'form': form, 'project': project})
 
 
+@login_required
 def delete_project(request, project_id):
     if request.method == 'POST':
         project = get_object_or_404(Project, id=project_id)
@@ -61,6 +67,7 @@ def delete_project(request, project_id):
         return redirect('projects:project_list')
 
 
+@login_required
 def edit_initial(request, project_id):
     if request.method == 'POST':
         project = get_object_or_404(Project, id=project_id)
@@ -81,6 +88,7 @@ def edit_initial(request, project_id):
         return render(request, 'projects/project_edit_initial.html', {'form': form, 'project': project})
 
 
+@login_required
 def budget(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     budgets = ProjectBudget.objects.all().filter(project__id=project_id)
@@ -90,6 +98,7 @@ def budget(request, project_id):
                    'project': project})
 
 
+@login_required
 def budget_add(request, project_id):
     if request.method == "GET":
         project = get_object_or_404(Project, id=project_id)
@@ -112,6 +121,7 @@ def budget_add(request, project_id):
                           {'form': form, 'project_id': project_id, 'project': project})
 
 
+@login_required
 def budget_edit(request, budget_id):
     if request.method == "GET":
         budget_object = get_object_or_404(ProjectBudget, id=budget_id)
@@ -137,6 +147,7 @@ def budget_edit(request, budget_id):
                            'budget': budget_object})
 
 
+@login_required
 def budget_delete(request, project_id, budget_id):
     budget_object = get_object_or_404(ProjectBudget, id=budget_id)
     name = budget_object.cost_type

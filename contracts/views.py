@@ -3,9 +3,11 @@ from projects.models import Project
 from django.contrib import messages
 from .models import ContractType, Contract, Stamp
 from .forms import ContractForm
+from django.contrib.auth.decorators import login_required
 
 
 # 初始化合同类型的函数，找个链接执行一下即可。考虑将最后一个菜单设置为系统维护，仅仅只有管理员可见。
+@login_required
 def initialize_contract_type(request):
     types = ContractType.objects.all()
 
@@ -31,6 +33,7 @@ def initialize_contract_type(request):
 
 
 # 初始化印花税与比例
+@login_required
 def initialize_stamp(request):
     types = Stamp.objects.all()
 
@@ -67,6 +70,7 @@ def initialize_stamp(request):
 
 
 # 列出某个项目对应合同
+@login_required
 def contract_list(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     quantity = project.contracts.count()
@@ -76,6 +80,7 @@ def contract_list(request, project_id):
 
 
 # 添加合同
+@login_required
 def contract_add(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     if request.method == 'GET':
@@ -94,6 +99,7 @@ def contract_add(request, project_id):
 
 
 # 修改合同
+@login_required
 def contract_edit(request, project_id, contract_id):
     project = get_object_or_404(Project, id=project_id)
     contract = get_object_or_404(Contract, id=contract_id)
@@ -116,6 +122,7 @@ def contract_edit(request, project_id, contract_id):
 
 
 # 删除合同
+@login_required
 def contract_delete(request, project_id, contract_id):
     if request.method == 'POST':
         contract = get_object_or_404(Contract, id=contract_id)
@@ -127,6 +134,7 @@ def contract_delete(request, project_id, contract_id):
 
 
 # 合同详情
+@login_required
 def contract_detail(request, project_id, contract_id):
     contract = get_object_or_404(Contract, id=contract_id)
     project = get_object_or_404(Project, id=project_id)
