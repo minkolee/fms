@@ -3,21 +3,20 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h1 class="text-center">{{ project.name }}</h1>
-
-    <p>{{ project.name }}位于{{ project.address }}，项目经理为{{ project.manager }}。</p>
-    <p>项目目前{% if project.active %}正在进行中{% else %}已结束{% endif %}。{% if project.start_time %}项目开始时间为：
-        {{ project.start_time|date:'Y年m月d日' }}。{% endif %}{% if project.complete_time %}项目竣工时间为：
-        {{ project.complete_time|date:'Y年m月d日' }}。{% endif %}</p>
-    <p>{{ project.text }}</p>
-    <div class="btn-group mb-2 d-print-none" role="group" aria-label="Basic example">
-        <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary">编辑基础信息</a>
-        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-primary">编辑项目预算</a>
+    <div class="mb-2 d-print-none" role="group" aria-label="Basic example">
+        <a href="{% url 'projects:project_edit' project.id %}" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
         <a href="{% url 'projects:project_edit_initial' project.id %}" type="button"
-           class="btn btn-primary">编辑初始数据</a>
-        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-info">项目合同</a>
-        <a href="{% url 'entry:project_entry_list' project.id %}" type="button" class="btn btn-info">项目变动</a>
-        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
+           class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 编辑初始数据</a>
+        <a href="{% url 'projects:project_budget' project.id %}" type="button" class="btn btn-info"><i class="fa fa-bar-chart" aria-hidden="true"></i> 项目预算</a>
+        <a href="{% url 'contracts:contract_list' project.id %}" type="button" class="btn btn-info"><i class="fa fa-files-o" aria-hidden="true"></i> 项目合同</a>
+        <a href="{% url 'entry:project_entry_list' project.id %}" type="button" class="btn btn-info"><i class="fa fa-list-ul" aria-hidden="true"></i> 项目明细</a>
+        <a href="" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-times" aria-hidden="true"></i> 删除</a>
     </div>
+    <p><small>{{ project.name }}位于{{ project.address }}，项目经理为{{ project.manager }}。</small></p>
+    <small>项目目前{% if project.active %}正在进行中{% else %}已结束{% endif %}。{% if project.start_time %}项目开始时间为：
+        {{ project.start_time|date:'Y年m月d日' }}。{% endif %}{% if project.complete_time %}项目竣工时间为：
+        {{ project.complete_time|date:'Y年m月d日' }}。{% endif %}</small>
+    <small>{{ project.text }}</small>
     <h2 class="text-center">汇总数据</h2>
     <table class="table table-striped">
         <thead>

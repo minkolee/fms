@@ -9,9 +9,12 @@ from django.contrib import messages
 def list_by_entry(request, entry_id):
     entry = get_object_or_404(Entry, id=entry_id)
 
-    contract = entry.contract
+    contract = None
 
-    project = contract.contract_project
+    if entry.contract:
+        contract = entry.contract
+
+    project = entry.project
 
     invoices = entry.invoices.all()
 

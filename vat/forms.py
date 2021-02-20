@@ -11,6 +11,7 @@ class VatInvoiceForm(forms.ModelForm):
             'price_without_vat',
             'vat',
             'send',
+            'description'
         )
         widgets = {
 

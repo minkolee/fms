@@ -23,10 +23,11 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('projects:project_detail', args=[self.id, ])
 
-    # 预算相关
+    # 是否有对应预算
     def has_budget(self):
         return self.budget.count() != 0
 
+    # 有预算的情况下的预算总收入
     def total_budget_income(self):
         if self.has_budget():
 
@@ -34,6 +35,7 @@ class Project(models.Model):
         else:
             return 0
 
+    # 有预算情况下的预算总成本
     def total_budget_cost(self):
         if self.has_budget():
 
@@ -64,7 +66,7 @@ class Project(models.Model):
 
     def gross_profit_ratio(self):
         if self.total_budget_income() == 0:
-            return None
+            return 0
         if self.has_budget():
             return self.total_budget_gross_profit() / self.total_budget_income()
         else:
@@ -72,7 +74,7 @@ class Project(models.Model):
 
     def net_profit_ratio(self):
         if self.total_budget_income() == 0:
-            return None
+            return 0
         if self.has_budget():
             return self.total_budget_net_profit() / self.total_budget_income()
         else:

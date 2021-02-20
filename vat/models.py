@@ -4,16 +4,17 @@ from entry.models import Entry
 
 # 增值税发票
 class VatInvoice(models.Model):
-    vat_type = models.SmallIntegerField(choices=((1, '销项税票'), (2, '进项税票')), default=1,verbose_name='发票种类')
+    vat_type = models.SmallIntegerField(choices=((1, '销项税票'), (2, '进项税票')), default=1, verbose_name='发票种类')
     price_without_vat = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='不含税额', default=0)
     vat = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='税额', default=0)
     invoice_number = models.CharField(max_length=8, verbose_name="发票号码")
+    description = models.CharField(max_length=255, verbose_name='备注', blank=True, null=True)
 
     # 外键，关联到某个具体变动，可以为空，表示该发票没有对应的结算
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name='invoices', blank=True, null=True)
 
     # 是否已经交付给客户，这个用一个按钮来反映，可以提交也可以不提交
-    send = models.BooleanField(default=False,verbose_name='已收到/交付（进项税票默认为收到，无需勾选）')
+    send = models.BooleanField(default=False, verbose_name='已收到/交付（进项税票默认为收到，无需勾选）')
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')

@@ -2,13 +2,19 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
+    <h3 class="text-center mt-2">合同明细记录列表</h3>
+    <a href="{{ contract.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus"
+                                                                                   aria-hidden="true"></i> 新增合同明细</a>
+    <a href="{% url 'contracts:contract_detail'  project.id contract.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle"
+                                                                                   aria-hidden="true"></i> 合同详情</a>
+    <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-files-o"
+                                                                                   aria-hidden="true"></i> 合同列表</a>
+    <a href="{% url 'entry:project_entry_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-list-ul"
+                                                                                   aria-hidden="true"></i> 项目明细</a>
     {% if quantity == 0 %}
-        <p>{{ contract.contract_name }}还没有变动记录，请<a href="{% url 'contracts:contract_detail' project.id contract.id %}">返回详情页面。</a></p>
+        <p>{{ contract.contract_name }}还没有明细记录，直接添加仅归属于合同的明细，请点击<span class="text-primary">新增合同明细</span>按钮。添加归属于结算的明细，请至结算页面添加。</p>
     {% else %}
-        <h3 class="text-center mt-2">{{ contract.contract_name }}变动记录清单</h3>
-        <a href="{{ contract.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2">新增非结算变动</a>
-        <a href="{% url 'contracts:contract_detail'  project.id contract.id %}" class="btn btn-secondary mt-2 mb-2">合同详情</a>
-        <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-secondary mt-2 mb-2">合同列表</a>
+        <p><small>{{ contract.contract_project.name }} - {{ contract.contract_name }}</small></p>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -34,7 +40,14 @@
                         <td>{{ entry.received_money|comma }}</td>
                         <td>{{ entry.paid_money|comma }}</td>
                         <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a>
-                            | <a href="{% url 'vat:vat_list_by_entry' entry.id %}">增值税</a></td>
+                            | <a href="{% url 'vat:vat_list_by_entry' entry.id %}">增值税</a>
+                        {% if entry.income_settlement %}
+                            {% if not entry.income_settlement.is_received %}<span class="badge badge-danger">检查结算</span>{% endif %}
+                        {% endif %}
+                        {% if entry.payment_settlement %}
+                            {% if not entry.payment_settlement.is_paid %}<span class="badge badge-danger">检查结算</span>{% endif %}
+                        {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

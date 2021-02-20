@@ -2,11 +2,13 @@
 
 {% block content %}
     {% include 'base/message.html' %}
+    <h3 class="text-center mt-2">项目清单</h3>
+    <div class="mb-2 d-print-none">
+    <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus" aria-hidden="true"></i> 新增项目</a>
+    </div>
     {% if quantity == 0 %}
-        <p>还没有任何项目，请<a href="{% url 'projects:project_add' %}">新增项目</a></p>
+        <p>还没有任何项目，请新增项目。</p>
     {% else %}
-        <h3 class="text-center mt-2">项目清单</h3>
-        <a href="{% url 'projects:project_add' %}" class="btn btn-primary mt-2 mb-2">新增项目</a>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -32,7 +34,7 @@
                             <i class="fa fa-times text-danger" aria-hidden="true"></i>
                         {% endif %} </td>
                         <td><a href="{% url 'projects:project_budget' project.id %}">预算</a> | <a href="{% url 'contracts:contract_list' project.id %}">合同</a> |
-                            <a href="{% url 'entry:project_entry_list' project.id %}">变动</a></td>
+                            <a href="{% url 'entry:project_entry_list' project.id %}">明细</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

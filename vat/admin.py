@@ -9,5 +9,6 @@ class VatInvoiceAdmin(admin.ModelAdmin):
         'price_without_vat',
         'vat',
         'entry',
-        'send'
+        'send',
+        'description'
     ]

@@ -1,7 +1,17 @@
 {% extends 'base/fix-nav.html' %}
 
 {% block content %}
-    <h3 class="text-center">新增{{ entry.contract.contract_project.name }} {{ entry.description }} 增值税票信息</h3>
+    <h3 class="text-center">编辑增值税发票信息</h3>
+    <p class="text-center"><small>{{ entry.project.name }} {% if entry.contract %}
+            - {{ entry.contract.contract_name }}
+        {% endif %}
+            {% if entry.income_settlement %}
+                - {{ entry.income_settlement.name }}
+            {% endif %}
+            {% if entry.payment_settlement %}
+                - {{ entry.payment_settlement.name }}
+            {% endif %}
+        </small></p>
     <div class="row mb-3">
         <div class="col-md-3 col-sm-1"></div>
         <div class="col-md">

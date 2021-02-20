@@ -2,15 +2,37 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
+    <h3 class="text-center mt-2">增值税发票信息</h3>
+    <div class="mb-2 d-print-none">
+        <a href="{% url 'vat:vat_add_by_entry' entry.id %}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus"
+                                                                                                 aria-hidden="true"></i>
+            新增发票</a>
+        <a href="{% url 'entry:entry_detail' entry.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle"
+                                                                                            aria-hidden="true"></i> 明细详情</a>
+        {% if contract %}
+            <a href="{% url 'entry:contract_entry_list' contract.id %}" class="btn btn-info mt-2 mb-2"><i
+                    class="fa fa-list-ul"
+                    aria-hidden="true"></i> 合同明细</a>
+        {% endif %}
+        <a href="{% url 'entry:project_entry_list' project.id %}" class="btn btn-info mt-2 mb-2"><i
+                class="fa fa-list-ul"></i> 项目明细</a>
+    </div>
     {% if quantity == 0 %}
-        <p>本次结算还没有增值税发票信息，请<a href="{% url 'vat:vat_add_by_entry' entry.id %}">新增增值税发票信息</a></p>
+        <p>该明细还没有增值税发票信息，请新增发票。</p>
     {% else %}
-        <h3 class="text-center mt-2">增值税发票信息</h3>
-        <a href="{% url 'vat:vat_add_by_entry' entry.id %}" class="btn btn-primary mt-2 mb-2">新增增值税发票</a>
-        <a href="{% url 'entry:entry_detail' entry.id %}" class="btn btn-secondary mt-2 mb-2">对应变动详情</a>
-        <a href="{% url 'entry:contract_entry_list' contract.id %}" class="btn btn-secondary mt-2 mb-2">所属合同变动</a>
-        <p><small>{{ contract.contract_project.name }} - {{ contract.contract_id }} {{ contract.contract_name }}
-            - {{ entry.description }} </small></p>
+
+
+        <p><small>{{ entry.project.name }} {% if entry.contract %}
+            - {{ entry.contract.contract_name }}
+        {% endif %}
+            {% if entry.income_settlement %}
+                - {{ entry.income_settlement.name }}
+            {% endif %}
+            {% if entry.payment_settlement %}
+                - {{ entry.payment_settlement.name }}
+            {% endif %}
+         - {{ entry.note }} - {{ entry.description }}
+        </small></p>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -41,13 +63,21 @@
                                 <i class="fa fa-times text-danger" aria-hidden="true"></i>
                             {% endif %}
                         </td>
-                        <td>{% if invoice.send %}
-                            <a href="{% url 'vat:vat_change_status' invoice.id %}" class="text-danger"><i class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
-                        {% else %}
-                            <a href="{% url 'vat:vat_change_status' invoice.id %}" class="text-primary"><i class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
-                        {% endif %}
-                            <a title="编辑" href="{% url 'vat:vat_edit' invoice.id %}" class="text-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;
-                            <a title="删除" id="delete" href="{% url 'vat:vat_delete' invoice.id %}" class="text-danger todelete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <td>
+                            <a title="编辑" href="{% url 'vat:vat_edit' invoice.id %}" class="text-primary h5"><i
+                                    class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;
+                            {% if invoice.send %}
+                                <a title="切换" href="{% url 'vat:vat_change_status' invoice.id %}"
+                                   class="text-danger h5"><i
+                                        class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
+                            {% else %}
+                                <a title="切换" href="{% url 'vat:vat_change_status' invoice.id %}"
+                                   class="text-info h5"><i
+                                        class="fa fa-refresh" aria-hidden="true"></i></a>&nbsp;
+                            {% endif %}
+
+                            <a title="删除" id="delete" href="{% url 'vat:vat_delete' invoice.id %}"
+                               class="text-danger todelete h5"><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -58,18 +88,18 @@
 {% endblock %}
 
 {% block jscode %}
-{#<script>#}
-        function test(e) {
-            if (!confirm('删除后不可恢复，确认吗？')){
-                e.preventDefault()
-            }
-        }
+    {#<script>#}
+    function todelete(e) {
+    if (!confirm('删除后不可恢复，确认吗？')){
+    e.preventDefault()
+    }
+    }
 
-        let as = document.getElementsByClassName('todelete')
-        let i =0;
-        for (; i < as.length; i++) {
-            as[i].addEventListener('click',test)
-        }
+    let as = document.getElementsByClassName('todelete')
+    let i =0;
+    for (; i < as.length; i++) {
+    as[i].addEventListener('click',todelete)
+    }
 
-{#</script>#}
+    {#</script>#}
 {% endblock %}

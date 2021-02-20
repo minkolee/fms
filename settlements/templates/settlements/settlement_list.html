@@ -2,17 +2,18 @@
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
-    {% if quantity == 0 %}
-        <p>{{ contract.contract_name }}还没有收款结算记录，请新增收款结算记录。
-        </p>
-        <a href="{% url 'settlements:settlement_add' contract.id %}" class="btn btn-primary mt-2 mb-2">新增收款结算记录</a>
-        <a href="{% url 'entry:project_entry_list' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">项目变动</a>
-        <a href="{% url 'contracts:contract_detail' contract.contract_project.id contract.id %}" class="btn btn-secondary mt-2 mb-2">合同详情</a>
+    <h3 class="text-center mt-2">收款结算记录</h3>
+    <div class="mb-2 d-print-none">
+    <a href="{% url 'settlements:settlement_add' contract.id %}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus" aria-hidden="true"></i> 新增收款结算</a>
+    <a href="{% url 'contracts:contract_detail' contract.contract_project.id contract.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle" aria-hidden="true"></i> 合同详情</a>
+    </div>
+        {% if quantity == 0 %}
+        <p>{{ contract.contract_name }}还没有收款结算记录，请新增收款结算。</p>
+{#        <a href="{% url 'settlements:settlement_add' contract.id %}" class="btn btn-primary mt-2 mb-2">新增收款结算记录</a>#}
+{#        <a href="{% url 'entry:project_entry_list' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">项目变动</a>#}
+{#        <a href="{% url 'contracts:contract_detail' contract.contract_project.id contract.id %}" class="btn btn-secondary mt-2 mb-2">合同详情</a>#}
     {% else %}
-        <h3 class="text-center mt-2">{{ contract.contract_name }} 收款结算记录</h3>
-        <a href="{% url 'settlements:settlement_add' contract.id %}" class="btn btn-primary mt-2 mb-2">新增收款结算记录</a>
-        <a href="{% url 'entry:project_entry_list' contract.contract_project.id %}" class="btn btn-secondary mt-2 mb-2">项目变动</a>
-        <a href="{% url 'contracts:contract_detail' contract.contract_project.id contract.id %}" class="btn btn-secondary mt-2 mb-2">合同详情</a>
+        <p><small>{{ contract.contract_project.name }} - {{ contract.contract_name }}</small></p>
         <div class="table-responsive-lg">
             <table class="table table-sm table-hover">
                 <thead>
@@ -31,15 +32,15 @@
                     <tr>
                         <th scope="row">{{ forloop.counter }}
                         </th>
-                        <td>{{ settlement.name }}</td>
+                        <td><a href="{% url 'settlements:settlement_detail' settlement.id %}">{{ settlement.name }}</a></td>
                         <td>{{ settlement.receivable|comma }}</td>
                         <td>{{ settlement.deduction|comma }}</td>
                         <td>{{ settlement.reception|comma }}</td>
                         <td>{{ settlement.not_received_yet|comma }}</td>
-                        <td><a href="{% url 'settlements:settlement_detail' settlement.id %}">详情</a> | <a
-                                href="{% url 'settlements:settlement_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">添加变动</a>
+                        <td><a
+                                href="{% url 'settlements:settlement_edit' settlement.id %}">编辑</a> | <a href="{{ settlement.get_entry_add_url }}">新增明细</a>
                         {% if not settlement.is_received %}
-                            <span class="badge badge-danger">检查变动</span>
+                            <span class="badge badge-danger">检查明细</span>
                          {% endif %}</td>
                     </tr>
                 {% endfor %}

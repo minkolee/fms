@@ -3,12 +3,13 @@
 {% block content %}
     {% include 'base/message.html' %}
     <h2 class="text-center">支付结算记录详情</h2>
-    <div class="btn-group mb-2 d-print-none" role="group" aria-label="Basic example">
-        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary">编辑</a>
-        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-secondary">结算列表</a>
-        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">删除</a>
+    <div class="mb-2 d-print-none" role="group" aria-label="Basic example">
+        <a href="{% url 'settlements:settlement_payment_edit' settlement.id %}" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
+        <a href="{{settlement.get_entry_add_url}}" type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 新增对应明细</a>
+        <a href="#" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-times" aria-hidden="true"></i> 删除</a>
+        <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-info"><i class="fa fa-list-alt" aria-hidden="true"></i> 付款结算列表</a>
     </div>
-    <div><small>{{ contract.contract_name }} - {{ settlement.name }}</small></div>
+    <div><small>{{ contract.contract_project.name }} - {{ contract.contract_name }} - {{ settlement.name }}</small></div>
     <table class="table table-bordered">
         <thead>
         <tr>

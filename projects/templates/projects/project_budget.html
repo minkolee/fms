@@ -3,14 +3,15 @@
 
 {% block content %}
     {% include 'base/message.html' %}
-    <h3 class="text-center mt-2">{{ project.name }}预算</h3>
-    <p>
-        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button">新增预算条目</a>
-        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-secondary">项目详情</a>
-    </p>
+    <h3 class="text-center mt-2">项目预算</h3>
+    <div class="mb-2 d-print-none">
+        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button"><i class="fa fa-plus" aria-hidden="true"></i> 新增预算</a>
+        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> 项目详情</a>
+    </div>
     {% if quantity == 0 %}
-        <p>无任何预算条目。</p>
+        <p>无任何预算条目，请新增预算。</p>
     {% else %}
+        <p><small>{{ project.name }}</small></p>
         <table class="table table-sm table-hover">
             <thead>
             <tr>
@@ -36,9 +37,9 @@
                     <td>{{ budget.target_expense|comma }}</td>
                     <td>{{ budget.change_time|date:'Y年m月d日' }}</td>
                     <td>{{ budget.description }}</td>
-                    <td><a href="{% url 'projects:project_budget_edit' budget.id %}">编辑</a> | <a
-                            href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger"
-                            disabled="disabled">删除</a></td>
+                    <td><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
+                            href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger h5 todelete"
+                            disabled="disabled"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                 </tr>
             {% endfor %}
             <tr>
@@ -73,5 +74,18 @@
 {% block jscode %}
     $('input').addClass('form-control');
     $('textarea').addClass('form-control');
+
+    function todelete(e) {
+            if (!confirm('删除后不可恢复，确认吗？')){
+                e.preventDefault()
+            }
+    }
+
+    let as = document.getElementsByClassName('todelete')
+    let i =0;
+    for (; i < as.length; i++) {
+        as[i].addEventListener('click',todelete)
+    };
+    console.log(as);
 
 {% endblock %}

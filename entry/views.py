@@ -148,7 +148,7 @@ def entry_edit(request, entry_id):
                       {'project_id': project_id, 'contract_id': contract_id,
                        'settlement_income_id': settlement_income_id,
                        'settlement_payment_id': settlement_payment_id,
-                       'form': form, 'project': project, 'entry_id': entry_id})
+                       'form': form, 'project': project, 'entry_id': entry_id, 'entry': entry})
 
     else:
         entry = get_object_or_404(Entry, id=entry_id)
@@ -188,6 +188,9 @@ def entry_edit(request, entry_id):
                 current_entry.save()
                 messages.success(request, '成功修改变动记录')
 
+                if contract_id != 0:
+                    return redirect(reverse('entry:contract_entry_list', args=[contract_id, ]))
+
                 return redirect(reverse('entry:project_entry_list', args=[project_id, ]))
 
             else:
@@ -197,13 +200,13 @@ def entry_edit(request, entry_id):
                               {'project_id': project_id, 'contract_id': contract_id,
                                'settlement_income_id': settlement_income_id,
                                'settlement_payment_id': settlement_payment_id,
-                               'form': form, 'project': project, 'entry_id': entry_id})
+                               'form': form, 'project': project, 'entry_id': entry_id, 'entry': entry})
 
         return render(request, 'entry/entry_edit.html',
                       {'project_id': project_id, 'contract_id': contract_id,
                        'settlement_income_id': settlement_income_id,
                        'settlement_payment_id': settlement_payment_id,
-                       'form': form, 'project': project, 'entry_id': entry_id})
+                       'form': form, 'project': project, 'entry_id': entry_id, 'entry': entry})
 
 
 def entry_delete(request, entry_id):

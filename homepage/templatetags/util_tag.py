@@ -15,7 +15,7 @@ def total_posts(decimal_obj):
 def total_posts(decimal_obj):
     if decimal_obj:
         return "{:.2f}%".format(decimal_obj * Decimal('100'))
-    return ""
+    return 0
 
 
 @register.filter(name='show_as_para')

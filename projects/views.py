@@ -92,8 +92,10 @@ def budget(request, project_id):
 
 def budget_add(request, project_id):
     if request.method == "GET":
+        project = get_object_or_404(Project, id=project_id)
         form = ProjectBudgetForm()
-        return render(request, 'projects/project_budget_add.html', {'form': form, 'project_id': project_id})
+        return render(request, 'projects/project_budget_add.html',
+                      {'form': form, 'project_id': project_id, 'project': project})
 
     else:
         form = ProjectBudgetForm(request.POST)
@@ -106,7 +108,8 @@ def budget_add(request, project_id):
             messages.success(request, '成功添加预算条目')
             return redirect(reverse('projects:project_budget', args=[project_id, ]))
         else:
-            return render(request, 'projects/project_budget_add.html', {'form': form, 'project_id': project_id})
+            return render(request, 'projects/project_budget_add.html',
+                          {'form': form, 'project_id': project_id, 'project': project})
 
 
 def budget_edit(request, budget_id):
@@ -115,7 +118,8 @@ def budget_edit(request, budget_id):
         form = ProjectBudgetForm(instance=budget_object)
 
         return render(request, 'projects/project_budget_edit.html',
-                      {'form': form, 'budget_id': budget_id, 'project_id': budget_object.project.id})
+                      {'form': form, 'budget_id': budget_id, 'project_id': budget_object.project.id,
+                       'budget': budget_object})
 
     else:
         budget_object = get_object_or_404(ProjectBudget, id=budget_id)
@@ -129,7 +133,8 @@ def budget_edit(request, budget_id):
             return redirect(reverse('projects:project_budget', args=[project_id, ]))
         else:
             return render(request, 'projects/project_budget_edit.html',
-                          {'budget_id': budget_id, 'form': form, 'project_id': budget_object.project.id})
+                          {'budget_id': budget_id, 'form': form, 'project_id': budget_object.project.id,
+                           'budget': budget_object})
 
 
 def budget_delete(request, project_id, budget_id):
