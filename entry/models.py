@@ -7,7 +7,7 @@ from django.urls import reverse
 
 class Entry(models.Model):
     # 变动描述
-    description = models.CharField(max_length=255, verbose_name='变动描述')
+    description = models.CharField(max_length=255, verbose_name='描述')
 
     # 凭证号
     note = models.CharField(max_length=255, verbose_name='凭证号')

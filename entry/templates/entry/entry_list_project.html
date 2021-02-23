@@ -6,7 +6,7 @@
     <div class="mb-2 d-print-none">
     <a href="{{ project.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus"
                                                                                    aria-hidden="true"></i> 新增项目明细</a>
-    <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle"
+    <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-files-o"
                                                                                                aria-hidden="true"></i>
         合同列表</a>
     <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle"
@@ -34,7 +34,7 @@
                 {% for entry in entries %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{% if entry.contract %}<a href="{{ entry.contract.get_absolute_url }}">
+                        <td title="{% if entry.contract %}{{ entry.contract.contract_name }}{% endif %}">{% if entry.contract %}<a href="{{ entry.contract.get_absolute_url }}">
                             {{ entry.contract.contract_name|wrap }}{% endif %}</a></td>
                         <td>{% if entry.income_settlement %}
                             <a href="{{ entry.income_settlement.get_absolute_url }}">{{ entry.income_settlement.name|wrap }}</a>{% endif %}

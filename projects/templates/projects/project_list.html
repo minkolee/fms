@@ -18,7 +18,7 @@
                     <th scope="col">项目地址</th>
                     <th scope="col">项目经理</th>
                     <th scope="col">是否有效</th>
-                    <th scope="col">操作</th>
+                    <th scope="col" class="d-print-none">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                             <i class="fa fa-check text-success" aria-hidden="true"></i>{% else %}
                             <i class="fa fa-times text-danger" aria-hidden="true"></i>
                         {% endif %} </td>
-                        <td><a href="{% url 'projects:project_budget' project.id %}">预算</a> | <a href="{% url 'contracts:contract_list' project.id %}">合同</a> |
+                        <td class="d-print-none"><a href="{% url 'projects:project_budget' project.id %}">预算</a> | <a href="{% url 'contracts:contract_list' project.id %}">合同</a> |
                             <a href="{% url 'entry:project_entry_list' project.id %}">明细</a></td>
                     </tr>
                 {% endfor %}

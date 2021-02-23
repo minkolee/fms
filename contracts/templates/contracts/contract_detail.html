@@ -4,7 +4,7 @@
     {% include 'base/message.html' %}
     <h2 class="text-center">合同信息</h2>
     <div class=" mb-2 d-print-none" role="group" aria-label="Basic example">
-        <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 编辑合同</a>
+        <a href="{% url 'contracts:contract_edit' project.id contract.id %}" type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> 编辑</a>
         <a type="button" class="btn btn-primary" href="{{ contract.get_entry_add_url }}"><i class="fa fa-plus" aria-hidden="true"></i> 新增非结算明细</a>
         <a href="{% url 'settlements:settlement_list' contract.id %}" type="button" class="btn btn-info"><i class="fa fa-jpy" aria-hidden="true"></i> 收款结算</a>
         <a href="{% url 'settlements:settlement_payment_list' contract.id %}" type="button" class="btn btn-info"><i class="fa fa-list-alt" aria-hidden="true"></i> 付款结算</a>

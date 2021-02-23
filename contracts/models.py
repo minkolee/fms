@@ -69,7 +69,7 @@ class Contract(models.Model):
     contract_secondary2 = models.CharField(max_length=255, verbose_name='其他合同对手2', null=True, blank=True)
     contract_secondary3 = models.CharField(max_length=255, verbose_name='其他合同对手3', null=True, blank=True)
     # 支付条款
-    contract_text = models.TextField(blank=True, null=True, verbose_name='支付条款')
+    contract_text = models.TextField(blank=True, null=True, verbose_name='关键条款')
     # 联系人
     contract_contact = models.CharField(max_length=255, blank=True, null=True, verbose_name='联系人')
     # 联系电话

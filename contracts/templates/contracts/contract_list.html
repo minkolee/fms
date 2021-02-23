@@ -18,10 +18,11 @@
                 <tr>
                     <th scope="col">合同编号</th>
                     <th scope="col">合同名称</th>
+                    <th scope="col">供应商</th>
                     <th scope="col">合同总价</th>
-                    <th scope="col">累计收款</th>
-                    <th scope="col">累计付款</th>
-                    <th scope="col">操作</th>
+                    <th scope="col">合同收款</th>
+                    <th scope="col">合同付款</th>
+                    <th scope="col" class="d-print-none">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,9 +30,10 @@
                     <tr>
                         <th scope="row"><a href="{{ contract.get_absolute_url }}">{{ contract.contract_id }}</a>
                         </th>
-                        <td>
+                        <td title="{{ contract.contract_name}}">
                             {{ contract.contract_name|wrap }}
                         </td>
+                        <td title="{{ contract.contract_primary}}">{{ contract.contract_primary|wrap}}</td>
                         <td>{{ contract.contract_price|comma}}</td>
                         <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a>{% if contract.is_net_cash_loss %}
                             <span class="badge badge-danger">现金流</span>
@@ -39,7 +41,7 @@
                         <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a>{% if contract.is_overpaid %}
                             <span class="badge badge-danger">超付</span>
                         {% endif %}</td>
-                        <td><a href="{% url 'entry:contract_entry_list' contract.id %}">明细</a>
+                        <td class="d-print-none"><a href="{% url 'entry:contract_entry_list' contract.id %}">明细</a>
                         </td>
                     </tr>
                 {% endfor %}

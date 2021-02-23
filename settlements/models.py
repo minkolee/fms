@@ -91,8 +91,7 @@ class IncomeSettlement(models.Model):
 
     # 判断累计的收款金额是否等于变动中对应的净现金流
     def is_received(self):
-        return (self.reception() - (self.cal_total_cash_in() - self.cal_total_cash_out()) == 0) or (
-                self.income_entries.all().count() == 0)
+        return self.reception() - (self.cal_total_cash_in() - self.cal_total_cash_out()) == 0
 
 
 class PaymentSettlement(models.Model):

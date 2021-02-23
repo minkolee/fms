@@ -19,11 +19,11 @@
                 <th scope="col">预算条目</th>
                 <th scope="col">目标收入</th>
                 <th scope="col">目标成本</th>
+                <th scope="col">间接费用</th>
                 <th scope="col">目标利润</th>
-                <th scope="col">管理费用</th>
                 <th scope="col">变更时间</th>
                 <th scope="col">说明</th>
-                <th scope="col">操作</th>
+                <th scope="col" class="d-print-none">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -33,11 +33,11 @@
                     <td>{{ budget.cost_type }}</td>
                     <td>{{ budget.target_revenue|comma }}</td>
                     <td>{{ budget.target_cost|comma }}</td>
-                    <td>{{ budget.target_profit|comma }}</td>
                     <td>{{ budget.target_expense|comma }}</td>
+                    <td>{{ budget.actual_profit|comma }}</td>
                     <td>{{ budget.change_time|date:'Y年m月d日' }}</td>
                     <td>{{ budget.description }}</td>
-                    <td><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
+                    <td class="d-print-none"><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
                             href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger h5 todelete"
                             disabled="disabled"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                 </tr>
@@ -46,14 +46,14 @@
                 <td colspan="2" class="text-primary">合计</td>
                 <td class="text-primary">{{ project.total_budget_income|comma }}</td>
                 <td class="text-primary">{{ project.total_budget_cost|comma }}</td>
-                <td class="text-primary"></td>
                 <td class="text-primary">{{ project.total_budget_expense|comma }}</td>
+                <td class="text-primary">{{project.total_budget_net_profit|comma}}</td>
                 <td class="text-primary"></td>
                 <td class="text-primary"></td>
                 <td class="text-primary"></td>
             </tr>
             <tr>
-                <td colspan="2" class="text-danger h5">目标利润 {{project.total_budget_net_profit|comma}}</td>
+                <td colspan="2" class="text-danger h5">利润合计 {{project.total_budget_net_profit|comma}}</td>
                 <td colspan="2" class="text-danger h5">利润率 {{ project.net_profit_ratio|rate }}</td>
                 <td></td>
                 <td></td>

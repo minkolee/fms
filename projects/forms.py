@@ -44,7 +44,7 @@ class ProjectBudgetForm(forms.ModelForm):
             'cost_type',
             'target_revenue',
             'target_cost',
-            'target_profit',
+            # 'target_profit',
             'target_expense',
             'change_time',
             'description',

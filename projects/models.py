@@ -202,7 +202,7 @@ class ProjectBudget(models.Model):
     target_revenue = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标收入', default=0)
     target_cost = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标成本', default=0)
     target_profit = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='目标利润', default=0)
-    target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='管理费用', default=0)
+    target_expense = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='间接费用', default=0)
     description = models.TextField(verbose_name="变更说明", blank=True, null=True)
     change_time = models.DateTimeField(null=True, verbose_name='变更时间', blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
@@ -210,6 +210,9 @@ class ProjectBudget(models.Model):
 
     def __str__(self):
         return self.cost_type
+
+    def actual_profit(self):
+        return self.target_revenue - self.target_cost - self.target_expense
 
     class Meta:
         ordering = ['created', ]
