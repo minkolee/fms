@@ -14,7 +14,8 @@
         项目详情</a>
     </div>
     {% if quantity == 0 %}
-        <p>{{ project.name }}还没有明细记录。新增仅仅归属于本项目的明细，请点击<span class="text-primary">新增项目明细</span>按钮。新增归属于合同的明细，请至合同或结算页面。</p>
+        <p><b>{{ project.name }}</b></p>
+        <p>还没有明细记录。新增仅仅归属于本项目的明细，请点击<span class="text-primary">新增项目明细</span>按钮。新增归属于合同的明细，请至合同或结算页面。</p>
     {% else %}
         <p><small>{{ project.name }}</small></p>
         <div class="table-responsive-lg">

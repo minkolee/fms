@@ -15,7 +15,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">项目名称</th>
-                    <th scope="col">项目地址</th>
+{#                    <th scope="col">项目地址</th>#}
                     <th scope="col">项目经理</th>
                     <th scope="col">是否有效</th>
                     <th scope="col" class="d-print-none">操作</th>
@@ -27,7 +27,7 @@
                         <th>{{ forloop.counter }}</th>
                         <th scope="row"><a href="{{ project.get_absolute_url}}">{{ project.name }}</a>
                         </th>
-                        <td>{{ project.address }}</td>
+{#                        <td>{{ project.address }}</td>#}
                         <td>{{ project.manager }}</td>
                         <td>{% if project.active %}
                             <i class="fa fa-check text-success" aria-hidden="true"></i>{% else %}

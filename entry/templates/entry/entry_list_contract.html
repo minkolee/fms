@@ -12,7 +12,8 @@
     <a href="{% url 'entry:project_entry_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-list-ul"
                                                                                    aria-hidden="true"></i> 项目明细</a>
     {% if quantity == 0 %}
-        <p>{{ contract.contract_name }}还没有明细记录，直接添加仅归属于合同的明细，请点击<span class="text-primary">新增合同明细</span>按钮。添加归属于结算的明细，请至结算页面添加。</p>
+        <p><b>{{ contract.contract_name }}</b></p>
+        <p>还没有明细记录，直接添加仅归属于合同的明细，请点击<span class="text-primary">新增合同明细</span>按钮。添加归属于结算的明细，请至结算页面添加。</p>
     {% else %}
         <p><small>{{ contract.contract_project.name }} - {{ contract.contract_name }}</small></p>
         <div class="table-responsive-lg">

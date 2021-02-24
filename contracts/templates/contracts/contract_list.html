@@ -8,7 +8,7 @@
     <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle" aria-hidden="true"></i> 项目详情</a>
     </div>
     {% if quantity == 0 %}
-        <p>{{ project.name }}还没有合同，请新增合同。</p>
+        <p><b>{{ project.name }}</b>还没有合同，请新增合同。</p>
     {% else %}
             <p><small>{{ project.name }} </small></p>
 
