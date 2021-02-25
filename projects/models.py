@@ -195,6 +195,15 @@ class Project(models.Model):
     def current_net_vat(self):
         return self.total_vat() - self.total_vat_input()
 
+    # 分析内容
+    # 非合同总支付，即过滤所有项目对应Entry的合同为null的部分
+    def project_paid_with_no_contract(self):
+        return self.project_entries.filter(contract=None).aggregate(Sum('cash'))['cash__sum']
+
+    # 合同总支付，即过滤所有项目对应Entry的合同为null的部分
+    def project_paid_with_contract(self):
+        return self.project_entries.exclude(contract=None).filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+
 
 class ProjectBudget(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')

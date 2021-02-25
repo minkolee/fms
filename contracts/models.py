@@ -146,3 +146,7 @@ class Contract(models.Model):
     # 非结算支付合计
     def normal_cal_total_cash_out(self):
         return self.cal_total_cash_out() - self.jiesuan_cal_total_cash_out()
+
+    # 计算这个合同的应付账款余额
+    def accounts_payable_balance(self):
+        return self.contract_entries.all().aggregate(Sum('accounts_payable'))['accounts_payable__sum']

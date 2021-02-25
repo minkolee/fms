@@ -25,6 +25,8 @@
                     <th scope="col">说明</th>
                     <th scope="col">收款金额</th>
                     <th scope="col">支付金额</th>
+                    <th scope="col">应付变化</th>
+                    <th scope="col">成本金额</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -40,6 +42,8 @@
                         <td>{{ entry.description }}</td>
                         <td>{{ entry.received_money|comma }}</td>
                         <td>{{ entry.paid_money|comma }}</td>
+                        <td>{{ entry.accounts_payable|comma }}</td>
+                        <td>{{ entry.capitalized_cost|comma }}</td>
                         <td><a href="{% url 'entry:entry_detail' entry.id %}">详情</a> | <a href="{% url 'entry:entry_edit' entry.id %}">编辑</a>
                             | <a href="{% url 'vat:vat_list_by_entry' entry.id %}">增值税</a>
                         {% if entry.income_settlement %}

@@ -22,6 +22,7 @@
                     <th scope="col">合同总价</th>
                     <th scope="col">合同收款</th>
                     <th scope="col">合同付款</th>
+                    <th scope="col">应付余额</th>
                     <th scope="col" class="d-print-none">操作</th>
                 </tr>
                 </thead>
@@ -35,13 +36,16 @@
                         </td>
                         <td title="{{ contract.contract_primary}}">{{ contract.contract_primary|wrap}}</td>
                         <td>{{ contract.contract_price|comma}}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a>{% if contract.is_net_cash_loss %}
+                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a></td>
+                        <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a></td>
+                        <td>{{ contract.accounts_payable_balance|comma }}</td>
+                        <td class="d-print-none"><a href="{% url 'entry:contract_entry_list' contract.id %}">明细
+                        {% if contract.is_net_cash_loss %}
                             <span class="badge badge-danger">现金流</span>
-                        {% endif %}</td>
-                        <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a>{% if contract.is_overpaid %}
+                        {% endif %}</a>
+                        {% if contract.is_overpaid %}
                             <span class="badge badge-danger">超付</span>
-                        {% endif %}</td>
-                        <td class="d-print-none"><a href="{% url 'entry:contract_entry_list' contract.id %}">明细</a>
+                        {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
