@@ -37,18 +37,18 @@ class Stamp(models.Model):
 
 # 合同
 class Contract(models.Model):
+    # 合同对应的项目
+    contract_project = models.ForeignKey(Project, related_name='contracts', verbose_name='项目名称',
+                                         on_delete=models.CASCADE)
     # 合同编号
     contract_id = models.CharField(max_length=255, unique=True, verbose_name='合同编号')
     # 合同名称
     contract_name = models.CharField(max_length=255, verbose_name='合同名称')
     # 合同类型 - 修改成即使重新初始化，会将外键设置为null
     contract_type = models.ForeignKey(ContractType, related_name='contract_type', verbose_name='合同类型',
-                                      on_delete=models.CASCADE,
+                                      on_delete=models.CASCADE
                                       # null=True, blank=True
                                       )
-    # 合同对应的项目
-    contract_project = models.ForeignKey(Project, related_name='contracts', verbose_name='项目名称',
-                                         on_delete=models.CASCADE)
     # 合同总价款（含税价）
     contract_price = models.DecimalField(max_digits=16, decimal_places=2, verbose_name='合同含税总价', default=0)
     # 签订日期
@@ -57,7 +57,7 @@ class Contract(models.Model):
     contract_end_date = models.DateTimeField(null=True, verbose_name='结束日期', blank=True)
     # 合同类别（用于印花税）- 修改成即使重新初始化，会将外键设置为null
     contract_stamp_type = models.ForeignKey(Stamp, related_name='stamp', verbose_name="合同类别",
-                                            on_delete=models.CASCADE,
+                                            on_delete=models.CASCADE
                                             # null=True, blank=True
                                             )
     # 合同标的
