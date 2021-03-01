@@ -2,7 +2,7 @@ from django.db import models
 from django.shortcuts import reverse
 from projects.models import Project
 from django.db.models import Sum
-
+from projects.models import ProjectBudget
 
 # 合同类型
 class ContractType(models.Model):
@@ -74,6 +74,10 @@ class Contract(models.Model):
     contract_contact = models.CharField(max_length=255, blank=True, null=True, verbose_name='联系人')
     # 联系电话
     contract_phone = models.CharField(max_length=255, blank=True, null=True, verbose_name='联系电话')
+
+    # 关联到预算条目的内容
+    contract_budget = models.ForeignKey(ProjectBudget, related_name='contract_budget', verbose_name='预算条目',
+                                        on_delete=models.CASCADE)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')

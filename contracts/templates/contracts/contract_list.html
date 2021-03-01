@@ -20,7 +20,8 @@
                     <th scope="col">合同名称</th>
                     <th scope="col">供应商</th>
                     <th scope="col">合同总价</th>
-                    <th scope="col">合同收款</th>
+                    <th scope="col">预算条目</th>
+{#                    <th scope="col">合同收款</th>#}
                     <th scope="col">合同付款</th>
                     <th scope="col">应付余额</th>
                     <th scope="col" class="d-print-none">操作</th>
@@ -36,7 +37,9 @@
                         </td>
                         <td title="{{ contract.contract_primary}}">{{ contract.contract_primary|wrap}}</td>
                         <td>{{ contract.contract_price|comma}}</td>
-                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a></td>
+                        <td>{{ contract.contract_budget.cost_type }}</td>
+{#                    合同收款#}
+{#                        <td><a href="{% url 'settlements:settlement_list' contract.id %}">{{ contract.cal_total_cash_in|comma }}</a></td>#}
                         <td><a href="{% url 'settlements:settlement_payment_list' contract.id %}">{{ contract.cal_total_cash_out|comma }}</a></td>
                         <td>{{ contract.accounts_payable_balance|comma }}</td>
                         <td class="d-print-none"><a href="{% url 'entry:contract_entry_list' contract.id %}">明细

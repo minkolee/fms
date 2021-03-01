@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from projects.models import Project
+from projects.models import Project, ProjectBudget
 from django.contrib import messages
 from .models import ContractType, Contract, Stamp
 from .forms import ContractForm
@@ -83,19 +83,25 @@ def contract_list(request, project_id):
 @login_required
 def contract_add(request, project_id):
     project = get_object_or_404(Project, id=project_id)
+    budgets = project.budget.all()
     if request.method == 'GET':
         form = ContractForm()
-        return render(request, 'contracts/contract_add.html', {'project': project, 'form': form})
+        return render(request, 'contracts/contract_add.html', {'project': project, 'form': form, 'budgets': budgets})
     else:
         form = ContractForm(request.POST)
+        budget_id = request.POST.get('contract_budget')
+        print(budget_id)
         if form.is_valid():
             contract = form.save(commit=False)
             contract.contract_project = project
+            budget = get_object_or_404(ProjectBudget, id=budget_id)
+            contract.contract_budget = budget
             contract.save()
             messages.success(request, '成功添加合同：' + contract.contract_name)
             return redirect(reverse('contracts:contract_list', args=[project.id, ]))
         else:
-            return render(request, 'contracts/contract_add.html', {'project': project, 'form': form})
+            return render(request, 'contracts/contract_add.html',
+                          {'project': project, 'form': form, 'budgets': budgets, 'budget_id': budget_id})
 
 
 # 修改合同
@@ -103,22 +109,31 @@ def contract_add(request, project_id):
 def contract_edit(request, project_id, contract_id):
     project = get_object_or_404(Project, id=project_id)
     contract = get_object_or_404(Contract, id=contract_id)
+    budgets = project.budget.all()
 
     if request.method == "GET":
         form = ContractForm(instance=contract)
-        return render(request, 'contracts/contract_edit.html', {'form': form, 'project': project, 'contract': contract})
+        budget_id = contract.contract_budget.id
+        return render(request, 'contracts/contract_edit.html',
+                      {'form': form, 'project': project, 'contract': contract, 'budgets': budgets,'budget_id':budget_id})
 
     else:
+        budget_id = request.POST.get('contract_budget')
         form = ContractForm(request.POST, instance=contract)
+        print(budget_id)
+
         if form.is_valid():
             current_project = form.save(commit=False)
             current_project.contract_project = project
+            budget = get_object_or_404(ProjectBudget, id=budget_id)
+            contract.contract_budget = budget
             current_project.save()
             messages.success(request, '成功修改合同信息：' + contract.contract_name)
             return redirect(reverse('contracts:contract_detail', args=[project.id, contract.id]))
         else:
             return render(request, 'contracts/contract_edit.html',
-                          {'form': form, 'project': project, 'contract': contract})
+                          {'form': form, 'project': project, 'contract': contract, 'budgets': budgets,
+                           'budget_id': budget_id})
 
 
 # 删除合同

@@ -7,16 +7,35 @@
         <div class="col-md-3 col-sm-1"></div>
         <div class="col-md">
             <form action="{% url 'contracts:contract_add' project.id %}" method="post">
+                <div class="form-group">
+                    <label for="id_contract_budget">预算条目:</label>
+                    <select name="contract_budget" required="" id="id_contract_budget" class="form-control">
+                        {% if not budget_id %}
+                            <option value="" selected="">---------</option>
+                            {% for budget in budgets %}
+                                <option value="{{ budget.id }}">{{ budget.cost_type }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="">---------</option>
+                            {% for budget in budgets %}
+                                <option value="{{ budget.id }}" {% if budget.id == budget_id %}
+                                        selected
+                                {% endif %} >{{ budget.cost_type }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+
                 {% for field in form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }}
-                            {{ field }}
-                        </div>
+                    <div class="form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
                 {% endfor %}
                 {% csrf_token %}
                 <button class="btn btn-primary" type="submit">提交</button>
-                <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-secondary" >返回</a>
+                <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-secondary">返回</a>
 
             </form>
         </div>
