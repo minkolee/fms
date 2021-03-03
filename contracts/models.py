@@ -4,6 +4,7 @@ from projects.models import Project
 from django.db.models import Sum
 from projects.models import ProjectBudget
 
+
 # 合同类型
 class ContractType(models.Model):
     id = models.IntegerField(choices=((1, '收入合同'), (2, '成本合同'), (3, '其他合同'), (4, '非合同')), primary_key=True)
@@ -110,9 +111,7 @@ class Contract(models.Model):
 
     # 计算合同总付款金额
     def cal_total_cash_out(self):
-
         result = self.contract_entries.all().filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
-
         if result:
             return -result
         else:
@@ -154,3 +153,11 @@ class Contract(models.Model):
     # 计算这个合同的应付账款余额
     def accounts_payable_balance(self):
         return self.contract_entries.all().aggregate(Sum('accounts_payable'))['accounts_payable__sum']
+
+    # 计算这个合同的合同履约成本余额
+    def capitalized_cost(self):
+        result = self.contract_entries.all().aggregate(Sum('capitalized_cost'))['capitalized_cost__sum']
+        if result:
+            return result
+        else:
+            return 0

@@ -242,6 +242,11 @@
                 <td>非合同付款</td>
                 <td>{{ project.project_paid_with_no_contract|comma }}</td>
             </tr>
+            <tr>
+                <td>不属于任何合同的费用支出</td>
+                <td>{{ project.none_contract_cost|comma }}</td>
+            </tr>
+
 
             </tbody>
         </table>

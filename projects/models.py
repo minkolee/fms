@@ -204,6 +204,15 @@ class Project(models.Model):
     def project_paid_with_contract(self):
         return self.project_entries.exclude(contract=None).filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
 
+    # 该项目所有的不对应合同的履约成本合计
+    def none_contract_cost(self):
+        result = self.project_entries.filter(contract=None).aggregate(Sum('capitalized_cost'))[
+            'capitalized_cost__sum']
+        if result:
+            return result
+        else:
+            return 0
+
 
 class ProjectBudget(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='budget')
@@ -222,6 +231,18 @@ class ProjectBudget(models.Model):
 
     def actual_profit(self):
         return self.target_revenue - self.target_cost - self.target_expense
+
+    # 以下是预算分析的内容
+    # 该预算对应的合同履约成本
+    def actual_cost(self):
+        queryset_contract = self.contract_budget.filter(contract_budget__id=self.id)
+        result = 0
+
+        if len(queryset_contract) > 0:
+            for each in queryset_contract:
+                result += each.capitalized_cost()
+
+        return result
 
     class Meta:
         ordering = ['created', ]
