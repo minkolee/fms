@@ -1,0 +1,59 @@
+{% extends 'base/fix-nav.html' %}
+{% load util_tag %}
+
+{% block body %}
+    {% if is_blank %}
+        <h3 class="text-center">搜索关键字为空</h3>
+    {% else %}
+        {% if total_number %}
+            <div class="container">
+            <h3 class="text-center">搜索结果</h3>
+
+            {% if project_number %}
+            <hr>
+                <h4 class="text-center">项目</h4>
+                {% for project in project_result %}
+                    <p><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            {% if contract_number %}
+            <hr>
+                <h4 class="text-center">合同</h4>
+                {% for contract in contract_result %}
+                    <p><a href="{{ contract.get_absolute_url }}">{{ contract.contract_id }} {{ contract.contract_name }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            {% if income_settlement_number %}
+            <hr>
+                <h4 class="text-center">收款结算</h4>
+                {% for settlement in income_settlement_result %}
+                    <p><a href="{{ settlement.get_absolute_url }}">{{ settlement.name }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            {% if payment_settlement_number %}
+            <hr>
+                <h4 class="text-center">付款结算</h4>
+                {% for settlement in payment_settlement_result %}
+                    <p><a href="{{ settlement.get_absolute_url }}">{{ settlement.name }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            {% if entry_number %}
+            <hr>
+                <h4 class="text-center">明细记录</h4>
+                {% for entry in entry_result %}
+                    <p><a href="{{ entry.get_absolute_url }}">{{ entry.description }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            </div>
+
+        {% else %}
+            <h3 class="text-center">未搜索到<span class="text-primary">{{ target_text }}</span>相关结果</h3>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

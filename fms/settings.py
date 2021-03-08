@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'settlements.apps.SettlementsConfig',
     'entry.apps.EntryConfig',
     'vat.apps.VatConfig',
+    'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [
