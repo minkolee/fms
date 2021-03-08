@@ -244,6 +244,18 @@ class ProjectBudget(models.Model):
 
         return result
 
+    # 该预算对应的总资金支付情况
+
+    def total_cash_paid(self):
+        queryset_contract = self.contract_budget.filter(contract_budget__id=self.id)
+        result = 0
+
+        if len(queryset_contract) > 0:
+            for each in queryset_contract:
+                result += each.cal_total_cash_out()
+
+        return result
+
     class Meta:
         ordering = ['created', ]
         verbose_name = '项目预算'

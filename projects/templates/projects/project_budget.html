@@ -21,8 +21,8 @@
                 <th scope="col">目标成本</th>
                 <th scope="col">间接费用</th>
                 <th scope="col">目标利润</th>
-                <th scope="col">实际成本</th>
-                <th scope="col">说明</th>
+                <th scope="col">发生成本</th>
+                <th scope="col">资金支付</th>
                 <th scope="col" class="d-print-none">操作</th>
             </tr>
             </thead>
@@ -36,7 +36,7 @@
                     <td>{{ budget.target_expense|comma }}</td>
                     <td>{{ budget.actual_profit|comma }}</td>
                     <td>{{ budget.actual_cost|comma }}</td>
-                    <td>{{ budget.description }}</td>
+                    <td>{{ budget.total_cash_paid|comma }}</td>
                     <td class="d-print-none"><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
                             href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger h5 todelete"
                             disabled="disabled"><i class="fa fa-times" aria-hidden="true"></i></a></td>
