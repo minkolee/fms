@@ -4,8 +4,8 @@
     {% include 'base/message.html' %}
     <h3 class="text-center mt-2">项目明细记录列表</h3>
     <div class="mb-2 d-print-none">
-    <a href="{{ project.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus"
-                                                                                   aria-hidden="true"></i> 新增项目明细</a>
+{#    <a href="{{ project.get_entry_add_url }}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus"#}
+{#                                                                                   aria-hidden="true"></i> 新增项目明细</a>#}
     <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-files-o"
                                                                                                aria-hidden="true"></i>
         合同列表</a>
@@ -15,7 +15,7 @@
     </div>
     {% if quantity == 0 %}
         <p><b>{{ project.name }}</b></p>
-        <p>还没有明细记录。新增仅仅归属于本项目的明细，请点击<span class="text-primary">新增项目明细</span>按钮。新增归属于合同的明细，请至合同或结算页面。</p>
+        <p>还没有明细记录。新增仅仅归属于本项目的明细，仅允许添加归属于合同（成本单元）的明细。新增归属于合同的明细，请至合同或结算页面。</p>
     {% else %}
         <p><small>{{ project.name }}</small></p>
         <div class="table-responsive-lg">
