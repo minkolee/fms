@@ -117,9 +117,9 @@ class Contract(models.Model):
         else:
             return 0
 
-    # 计算是否超付
+    # 计算是否超付,非单价合同超付
     def is_overpaid(self):
-        return self.contract_price < self.cal_total_cash_out()
+        return (self.contract_price < self.cal_total_cash_out()) and (self.contract_price != 0)
 
     # 计算合同资金收支是否出现问题, 成本合同不会考虑资金收支，仅考虑超付
     def is_net_cash_loss(self):

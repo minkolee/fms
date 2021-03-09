@@ -22,7 +22,6 @@ def search_text(request):
                                                   | Q(contract_secondary1__contains=target_text)
                                                   | Q(contract_secondary2__contains=target_text)
                                                   | Q(contract_secondary3__contains=target_text)
-                                                  | Q(contract_text__contains=target_text)
                                                   | Q(contract_contact__contains=target_text)
                                                   | Q(contract_detail__contains=target_text)
                                                   )
