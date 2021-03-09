@@ -79,6 +79,16 @@ def contract_list(request, project_id):
                   {"project": project, 'quantity': quantity, 'contracts': contracts})
 
 
+# 宽屏版本
+@login_required
+def contract_list_wide(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    quantity = project.contracts.count()
+    contracts = project.contracts.all()
+    return render(request, 'contracts/contract_list_fluid.html',
+                  {"project": project, 'quantity': quantity, 'contracts': contracts})
+
+
 # 添加合同
 @login_required
 def contract_add(request, project_id):
@@ -115,7 +125,8 @@ def contract_edit(request, project_id, contract_id):
         form = ContractForm(instance=contract)
         budget_id = contract.contract_budget.id
         return render(request, 'contracts/contract_edit.html',
-                      {'form': form, 'project': project, 'contract': contract, 'budgets': budgets,'budget_id':budget_id})
+                      {'form': form, 'project': project, 'contract': contract, 'budgets': budgets,
+                       'budget_id': budget_id})
 
     else:
         budget_id = request.POST.get('contract_budget')

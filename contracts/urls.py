@@ -18,6 +18,7 @@ urlpatterns = [
     path('initialize/contract/', views.initialize_contract_type, name='contract_type_initial'),
     path('initialize/stamp/', views.initialize_stamp, name='contract_stamp_initial'),
     path('list/<int:project_id>/', views.contract_list, name='contract_list'),
+    path('list/<int:project_id>/w/', views.contract_list_wide, name='contract_list_wide'),
     path('add/<int:project_id>/', views.contract_add, name='contract_add'),
     path('edit/<int:project_id>/<int:contract_id>/', views.contract_edit, name='contract_edit'),
     path('delete/<int:project_id>/<int:contract_id>/', views.contract_delete, name='contract_delete'),

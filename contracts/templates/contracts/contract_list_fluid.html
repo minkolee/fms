@@ -1,4 +1,4 @@
-{% extends 'base/fix-nav.html' %}
+{% extends 'base/fix-nav-fluid.html' %}
 {% load util_tag %}
 {% block content %}
     {% include 'base/message.html' %}
@@ -6,7 +6,7 @@
     <div class=" mb-2 d-print-none">
     <a href="{% url 'contracts:contract_add' project.id %}" class="btn btn-primary mt-2 mb-2"><i class="fa fa-plus" aria-hidden="true"></i> 新增合同</a>
     <a href="{% url 'projects:project_detail' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-info-circle" aria-hidden="true"></i> 项目详情</a>
-    <a href="{% url 'contracts:contract_list_wide' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-expand" aria-hidden="true"></i> 全部显示</a>
+    <a href="{% url 'contracts:contract_list' project.id %}" class="btn btn-info mt-2 mb-2"><i class="fa fa-compress" aria-hidden="true"></i> 紧凑显示</a>
     </div>
     {% if quantity == 0 %}
         <p><b>{{ project.name }}</b>还没有合同，请新增合同。</p>
@@ -34,9 +34,9 @@
                         <th scope="row"><a href="{{ contract.get_absolute_url }}">{{ contract.contract_id }}</a>
                         </th>
                         <td title="{{ contract.contract_name}}">
-                            {{ contract.contract_name|wrap }}
+                            {{ contract.contract_name }}
                         </td>
-                        <td title="{{ contract.contract_primary}}">{{ contract.contract_primary|wrap}}</td>
+                        <td title="{{ contract.contract_primary}}">{{ contract.contract_primary}}</td>
                         <td>{{ contract.contract_price|comma}}</td>
                         <td>{{ contract.contract_budget.cost_type }}</td>
 {#                    合同收款#}
