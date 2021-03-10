@@ -23,15 +23,14 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('projects:project_detail', args=[self.id, ])
 
-    # 是否有对应预算
+    # 是否有对应预算,检查非虚拟条目的数量是否等于0
     def has_budget(self):
-        return self.budget.count() != 0
+        return self.budget.filter(is_virtual=False).count() != 0
 
     # 有预算的情况下的预算总收入
     def total_budget_income(self):
         if self.has_budget():
-
-            return self.budget.all().aggregate(result=Sum('target_revenue'))['result']
+            return self.budget.filter(is_virtual=False).aggregate(result=Sum('target_revenue'))['result']
         else:
             return 0
 
@@ -39,14 +38,14 @@ class Project(models.Model):
     def total_budget_cost(self):
         if self.has_budget():
 
-            return self.budget.all().aggregate(result=Sum('target_cost'))['result']
+            return self.budget.filter(is_virtual=False).all().aggregate(result=Sum('target_cost'))['result']
         else:
             return 0
 
     def total_budget_expense(self):
         if self.has_budget():
 
-            return self.budget.all().aggregate(result=Sum('target_expense'))['result']
+            return self.budget.filter(is_virtual=False).aggregate(result=Sum('target_expense'))['result']
         else:
             return 0
 
@@ -226,8 +225,14 @@ class ProjectBudget(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
+    # 添加虚拟预算条目，用于归集
+    is_virtual = models.BooleanField(default=False, verbose_name='虚拟条目')
+
     def __str__(self):
-        return self.cost_type
+        if self.is_virtual:
+            return '虚拟条目-' + self.cost_type
+        else:
+            return self.cost_type
 
     def actual_profit(self):
         return self.target_revenue - self.target_cost - self.target_expense

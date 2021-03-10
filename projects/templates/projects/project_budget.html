@@ -5,8 +5,20 @@
     {% include 'base/message.html' %}
     <h3 class="text-center mt-2">项目预算</h3>
     <div class="mb-2 d-print-none">
-        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button"><i class="fa fa-plus" aria-hidden="true"></i> 新增预算</a>
-        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> 项目详情</a>
+        <a href="{% url 'projects:project_budget_add' project_id %}" class="btn btn-primary" type="button"><i
+                class="fa fa-plus" aria-hidden="true"></i> 新增预算</a>
+        <a href="{% url 'projects:project_detail' project_id %}" class="btn btn-info"><i class="fa fa-info-circle"
+                                                                                         aria-hidden="true"></i>
+            项目详情</a>
+        {% if quantity_virtual %}
+            {% if show_all %}
+                <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-info"><i
+                        class="fa fa-info-circle" aria-hidden="true"></i> 隐藏虚拟条目</a>
+            {% else %}
+                <a href="{% url 'projects:project_budget_show_all' project_id %}" class="btn btn-info"><i
+                        class="fa fa-info-circle" aria-hidden="true"></i> 显示虚拟条目</a>
+            {% endif %}
+        {% endif %}
     </div>
     {% if quantity == 0 %}
         <p>无任何预算条目，请新增预算。</p>
@@ -37,8 +49,10 @@
                     <td>{{ budget.actual_profit|comma }}</td>
                     <td>{{ budget.actual_cost|comma }}</td>
                     <td>{{ budget.total_cash_paid|comma }}</td>
-                    <td class="d-print-none"><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
-                            href="{% url 'projects:project_budget_delete' project_id budget.id %}" class="text-danger h5 todelete"
+                    <td class="d-print-none"><a class="h5" href="{% url 'projects:project_budget_edit' budget.id %}"><i
+                            class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a
+                            href="{% url 'projects:project_budget_delete' project_id budget.id %}"
+                            class="text-danger h5 todelete"
                             disabled="disabled"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                 </tr>
             {% endfor %}
@@ -47,13 +61,13 @@
                 <td class="text-primary">{{ project.total_budget_income|comma }}</td>
                 <td class="text-primary">{{ project.total_budget_cost|comma }}</td>
                 <td class="text-primary">{{ project.total_budget_expense|comma }}</td>
-                <td class="text-primary">{{project.total_budget_net_profit|comma}}</td>
+                <td class="text-primary">{{ project.total_budget_net_profit|comma }}</td>
                 <td class="text-primary"></td>
                 <td class="text-primary"></td>
                 <td class="text-primary"></td>
             </tr>
             <tr>
-                <td colspan="2" class="text-danger h5">利润合计 {{project.total_budget_net_profit|comma}}</td>
+                <td colspan="2" class="text-danger h5">利润合计 {{ project.total_budget_net_profit|comma }}</td>
                 <td colspan="2" class="text-danger h5">利润率 {{ project.net_profit_ratio|rate }}</td>
                 <td></td>
                 <td></td>
@@ -76,15 +90,15 @@
     $('textarea').addClass('form-control');
 
     function todelete(e) {
-            if (!confirm('删除后不可恢复，确认吗？')){
-                e.preventDefault()
-            }
+    if (!confirm('删除后不可恢复，确认吗？')){
+    e.preventDefault()
+    }
     }
 
     let as = document.getElementsByClassName('todelete')
     let i =0;
     for (; i < as.length; i++) {
-        as[i].addEventListener('click',todelete)
+    as[i].addEventListener('click',todelete)
     };
     console.log(as);
 

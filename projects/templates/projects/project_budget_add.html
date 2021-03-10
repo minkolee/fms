@@ -13,7 +13,13 @@
                             {{ field.label_tag }}
                             {{ field }}
                         </div>
+
                     {% endfor %}
+                    <div class="form-group form-check">
+                            <input type="checkbox" name="is_virtual" id="id_is_virtual" class="form-check-input" value="1">
+                            <label for="id_is_virtual" class="form-check-label">虚拟条目:</label>
+                    </div>
+                    <p><small>设置预算为虚拟条目后，仅作为归集单元，系统计算利润时不包含虚拟条目。</small></p>
                     {% csrf_token %}
                     <button class="btn btn-primary" type="submit">提交</button>
                     <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-secondary">返回</a>
@@ -28,5 +34,6 @@
 {% block jscode %}
     $('input').addClass('form-control');
     $('textarea').addClass('form-control');
-
+    $('#id_is_virtual').removeClass('form-control');
+    $('#id_is_virtual').addClass('form-check-input');
 {% endblock %}

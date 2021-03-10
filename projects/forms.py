@@ -46,6 +46,7 @@ class ProjectBudgetForm(forms.ModelForm):
             'target_cost',
             # 'target_profit',
             'target_expense',
+            # 'is_virtual',
             'change_time',
             'description',
         )

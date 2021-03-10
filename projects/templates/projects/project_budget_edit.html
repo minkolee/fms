@@ -2,32 +2,39 @@
 
 {% block content %}
     <h3 class="text-center">编辑预算条目</h3>
-        <p class="text-center"><small>{{ budget.project.name }} - {{ budget.cost_type }}</small></p>
+    <p class="text-center"><small>{{ budget.project.name }} - {{ budget.cost_type }}</small></p>
 
-        <div class="row mb-3">
-            <div class="col-md-3 col-sm-1"></div>
-            <div class="col">
-                <form action="{% url 'projects:project_budget_edit' budget_id %}" method="post">
-                    {% for field in form %}
-                        <div class="form-group">
-                            {{ field.errors }}
-                            {{ field.label_tag }}
-                            {{ field }}
-                        </div>
-                    {% endfor %}
-                    {% csrf_token %}
-                    <input type="hidden" value="{{ project_id }}" name="project_id">
-                    <button class="btn btn-primary" type="submit">提交</button>
-                    <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-secondary" >返回</a>
-                </form>
-            </div>
-            <div class="col-md-3 col-sm-1"></div>
+    <div class="row mb-3">
+        <div class="col-md-3 col-sm-1"></div>
+        <div class="col">
+            <form action="{% url 'projects:project_budget_edit' budget_id %}" method="post">
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+                <div class="form-group form-check">
+                    <input type="checkbox" name="is_virtual" {% if budget.is_virtual %} checked {% endif %}
+                           id="id_is_virtual" class="form-check-input" value="1">
+                    <label for="id_is_virtual" class="form-check-label">虚拟条目:</label>
+                </div>
+                {% csrf_token %}
+                <input type="hidden" value="{{ project_id }}" name="project_id">
+                <button class="btn btn-primary" type="submit">提交</button>
+                <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-secondary">返回</a>
+            </form>
         </div>
+        <div class="col-md-3 col-sm-1"></div>
+    </div>
 
 {% endblock %}
 
 {% block jscode %}
     $('input').addClass('form-control');
     $('textarea').addClass('form-control');
-
+    $('#id_is_virtual').removeClass('form-control');
+    $('#id_is_virtual').addClass('form-check-input');
 {% endblock %}

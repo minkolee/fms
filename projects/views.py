@@ -91,11 +91,25 @@ def edit_initial(request, project_id):
 @login_required
 def budget(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    budgets = ProjectBudget.objects.all().filter(project__id=project_id)
+    budgets = ProjectBudget.objects.all().filter(project__id=project_id).filter(is_virtual=False)
+    # 非虚拟条目数量
     quantity = budgets.count()
+    # 虚拟条目数量
+    quantity_virtual = ProjectBudget.objects.filter(project__id=project_id).filter(is_virtual=True).count()
     return render(request, 'projects/project_budget.html',
                   {'budgets': budgets, 'quantity': quantity, 'project_id': project_id,
-                   'project': project})
+                   'project': project, 'show_all': False, 'quantity_virtual': quantity_virtual})
+
+
+@login_required
+def budget_show_all(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    budgets = ProjectBudget.objects.all().filter(project__id=project_id)
+    quantity = budgets.count()
+    quantity_virtual = ProjectBudget.objects.filter(project__id=project_id).filter(is_virtual=True).count()
+    return render(request, 'projects/project_budget.html',
+                  {'budgets': budgets, 'quantity': quantity, 'project_id': project_id,
+                   'project': project, 'show_all': True, 'quantity_virtual': quantity_virtual})
 
 
 @login_required
@@ -109,13 +123,19 @@ def budget_add(request, project_id):
     else:
         form = ProjectBudgetForm(request.POST)
         project = get_object_or_404(Project, id=project_id)
+        is_virtual = request.POST.get("is_virtual")
 
         if form.is_valid():
             current_object = form.save(commit=False)
             current_object.project = project
+            if is_virtual:
+                current_object.is_virtual = True
             current_object.save()
             messages.success(request, '成功添加预算条目')
-            return redirect(reverse('projects:project_budget', args=[project_id, ]))
+            if is_virtual:
+                return redirect(reverse('projects:project_budget_show_all', args=[project_id, ]))
+            else:
+                return redirect(reverse('projects:project_budget', args=[project_id, ]))
         else:
             return render(request, 'projects/project_budget_add.html',
                           {'form': form, 'project_id': project_id, 'project': project})
@@ -134,13 +154,21 @@ def budget_edit(request, budget_id):
     else:
         budget_object = get_object_or_404(ProjectBudget, id=budget_id)
         form = ProjectBudgetForm(request.POST, instance=budget_object)
+        is_virtual = request.POST.get("is_virtual")
         if form.is_valid():
             current_object = form.save(commit=False)
             project_id = int(request.POST.get('project_id'))
             current_object.project = get_object_or_404(Project, id=project_id)
+            if is_virtual:
+                current_object.is_virtual = True
+            else:
+                current_object.is_virtual = False
             current_object.save()
             messages.success(request, '成功编辑预算条目:' + budget_object.cost_type)
-            return redirect(reverse('projects:project_budget', args=[project_id, ]))
+            if is_virtual:
+                return redirect(reverse('projects:project_budget_show_all', args=[project_id, ]))
+            else:
+                return redirect(reverse('projects:project_budget', args=[project_id, ]))
         else:
             return render(request, 'projects/project_budget_edit.html',
                           {'budget_id': budget_id, 'form': form, 'project_id': budget_object.project.id,
