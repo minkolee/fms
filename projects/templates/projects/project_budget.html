@@ -12,11 +12,9 @@
             项目详情</a>
         {% if quantity_virtual %}
             {% if show_all %}
-                <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-info"><i
-                        class="fa fa-info-circle" aria-hidden="true"></i> 隐藏虚拟条目</a>
+                <a href="{% url 'projects:project_budget' project_id %}" class="btn btn-info"><i class="fa fa-eye-slash" aria-hidden="true"></i> 隐藏虚拟条目</a>
             {% else %}
-                <a href="{% url 'projects:project_budget_show_all' project_id %}" class="btn btn-info"><i
-                        class="fa fa-info-circle" aria-hidden="true"></i> 显示虚拟条目</a>
+                <a href="{% url 'projects:project_budget_show_all' project_id %}" class="btn btn-info"><i class="fa fa-eye" aria-hidden="true"></i> 显示全部</a>
             {% endif %}
         {% endif %}
     </div>
@@ -27,7 +25,7 @@
         <table class="table table-sm table-hover">
             <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col"></th>
                 <th scope="col">预算条目</th>
                 <th scope="col">目标收入</th>
                 <th scope="col">目标成本</th>
