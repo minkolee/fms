@@ -90,6 +90,19 @@ DATABASES = {
     }
 }
 
+# MySQL Setting，use official mysql.connector
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql.connector.django',
+#         'NAME': 'fms',
+#         'USER': 'fms',
+#         'PASSWORD': '********',
+#         'HOST': '106.54.215.164',
+#         'PORT': 3306
+#     }
+# }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
