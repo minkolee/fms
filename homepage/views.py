@@ -1,11 +1,8 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from .models import About
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
-from contracts.models import Contract
-
 
 def index(request):
     return render(request, 'homepage/index.html')
@@ -16,10 +13,10 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save(commit=False)
-            new_user.is_active = True
+            new_user.is_active = False
             new_user.save()
             # 注册成功
-            messages.success(request, "注册成功，请登录")
+            messages.success(request, "注册成功，请联系管理员激活账号")
             return render(request, 'users/login.html', {"next": "/"})
         else:
             return render(request, 'users/register.html', {'form': form})
