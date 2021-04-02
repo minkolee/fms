@@ -27,21 +27,21 @@ class Project(models.Model):
     def has_budget(self):
         return self.budget.filter(is_virtual=False).count() != 0
 
-    # 有预算的情况下的预算总收入
+    # 有预算的情况下的预算总收入,不含虚拟条目
     def total_budget_income(self):
         if self.has_budget():
             return self.budget.filter(is_virtual=False).aggregate(result=Sum('target_revenue'))['result']
         else:
             return 0
 
-    # 有预算情况下的预算总成本
+    # 有预算情况下的预算总成本，不含虚拟条目
     def total_budget_cost(self):
         if self.has_budget():
-
             return self.budget.filter(is_virtual=False).all().aggregate(result=Sum('target_cost'))['result']
         else:
             return 0
 
+    # 有预算情况下的预算总间接费用，不含虚拟条目
     def total_budget_expense(self):
         if self.has_budget():
 
@@ -49,20 +49,21 @@ class Project(models.Model):
         else:
             return 0
 
+    # 不含虚拟条目的毛利
     def total_budget_gross_profit(self):
         if self.has_budget():
-
             return self.total_budget_income() - self.total_budget_cost()
         else:
             return 0
 
+    # 不含虚拟条目的净利润
     def total_budget_net_profit(self):
         if self.has_budget():
-
             return self.total_budget_gross_profit() - self.total_budget_expense()
         else:
             return 0
 
+    # 毛利率
     def gross_profit_ratio(self):
         if self.total_budget_income() == 0:
             return 0
@@ -71,6 +72,7 @@ class Project(models.Model):
         else:
             return 0
 
+    # 净利率
     def net_profit_ratio(self):
         if self.total_budget_income() == 0:
             return 0
@@ -197,11 +199,19 @@ class Project(models.Model):
     # 分析内容
     # 非合同总支付，即过滤所有项目对应Entry的合同为null的部分
     def project_paid_with_no_contract(self):
-        return self.project_entries.filter(contract=None).aggregate(Sum('cash'))['cash__sum']
+        result = self.project_entries.filter(contract=None).aggregate(Sum('cash'))['cash__sum']
+        if result:
+            return -result
+        else:
+            return 0
 
     # 合同总支付，即过滤所有项目对应Entry的合同为null的部分
     def project_paid_with_contract(self):
-        return self.project_entries.exclude(contract=None).filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+        result = self.project_entries.exclude(contract=None).filter(cash__lt=0).aggregate(Sum('cash'))['cash__sum']
+        if result:
+            return -result
+        else:
+            return 0
 
     # 该项目所有的不对应合同的履约成本合计
     def none_contract_cost(self):
@@ -211,6 +221,19 @@ class Project(models.Model):
             return result
         else:
             return 0
+
+    # 该项目所有的非虚拟条目的付款合计
+    def project_paid_none_virtual_budget(self):
+        budgets = self.budget.filter(is_virtual=False)
+
+        result = 0
+
+        if len(budgets) > 0:
+            for each in budgets:
+                result += each.total_cash_paid()
+            return result
+        else:
+            return result
 
 
 class ProjectBudget(models.Model):
@@ -240,7 +263,7 @@ class ProjectBudget(models.Model):
     # 以下是预算分析的内容
     # 该预算对应的合同履约成本
     def actual_cost(self):
-        queryset_contract = self.contract_budget.filter(contract_budget__id=self.id)
+        queryset_contract = self.contract_budget.all()
         result = 0
 
         if len(queryset_contract) > 0:
@@ -249,10 +272,9 @@ class ProjectBudget(models.Model):
 
         return result
 
-    # 该预算对应的总资金支付情况
-
+    # 该预算对应的合同的总资金支付情况
     def total_cash_paid(self):
-        queryset_contract = self.contract_budget.filter(contract_budget__id=self.id)
+        queryset_contract = self.contract_budget.all()
         result = 0
 
         if len(queryset_contract) > 0:
